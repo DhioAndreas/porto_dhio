@@ -1,5 +1,5 @@
 ---
-import StatusBar from "./StatusBar.astro";
+import HeroDeck from "./HeroDeck.astro";
 ---
 
 <section class="hero-section" id="hero">
@@ -10,6 +10,7 @@ import StatusBar from "./StatusBar.astro";
         <div class="hero-meta-strip">
           <span class="tag tag-yellow">PORTFOLIO // SYSTEM ONLINE</span>
           <span class="tag tag-blue">JAKARTA TIMUR, ID</span>
+          <span class="tag tag-green">READY TO HIRE</span>
         </div>
 
         <h1 class="hero-name">
@@ -55,28 +56,40 @@ import StatusBar from "./StatusBar.astro";
         </div>
       </div>
 
-      <!-- Right Column: Status Bar Widget & Stats -->
+      <!-- Right Column: Interactive Mission Control Deck & Metrics -->
       <div class="hero-sidebar">
-        <!-- Terminal Status Bar Component -->
-        <StatusBar />
+        <!-- Vibrant Interactive Control Deck Component -->
+        <HeroDeck />
 
-        <!-- Key Metrics Quad Grid -->
+        <!-- Key Metrics Quad Grid with Interactive Badges -->
         <div class="stats-quad-grid">
           <div class="stat-box">
-            <span class="stat-number">3.34</span>
-            <span class="stat-label">IPK / 4.00 (S1 TI)</span>
+            <div class="stat-icon">🎓</div>
+            <div class="stat-texts">
+              <span class="stat-number">3.34</span>
+              <span class="stat-label">IPK / 4.00 (S1 TI)</span>
+            </div>
           </div>
           <div class="stat-box stat-box-yellow">
-            <span class="stat-number">CCNAv7</span>
-            <span class="stat-label">Cisco Certified</span>
+            <div class="stat-icon">🌐</div>
+            <div class="stat-texts">
+              <span class="stat-number">CCNAv7</span>
+              <span class="stat-label">Cisco Certified</span>
+            </div>
           </div>
           <div class="stat-box stat-box-blue">
-            <span class="stat-number">6+</span>
-            <span class="stat-label">Certifications</span>
+            <div class="stat-icon">📜</div>
+            <div class="stat-texts">
+              <span class="stat-number">6+</span>
+              <span class="stat-label">Certifications</span>
+            </div>
           </div>
           <div class="stat-box">
-            <span class="stat-number">9+ Thn</span>
-            <span class="stat-label">Leadership & Civic</span>
+            <div class="stat-icon">👥</div>
+            <div class="stat-texts">
+              <span class="stat-number">9+ Thn</span>
+              <span class="stat-label">Leadership & Civic</span>
+            </div>
           </div>
         </div>
       </div>
@@ -212,18 +225,28 @@ import StatusBar from "./StatusBar.astro";
     background: #FFFFFF;
     border: var(--border-thick);
     box-shadow: var(--shadow-hard-sm);
-    padding: 1rem;
+    padding: 0.75rem 0.85rem;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    text-align: center;
-    transition: transform 0.1s ease;
+    gap: 0.65rem;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
   }
 
   .stat-box:hover {
     transform: translate(2px, 2px);
     box-shadow: var(--shadow-pressed);
+  }
+
+  .stat-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .stat-texts {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
   }
 
   .stat-box-yellow {
@@ -241,15 +264,14 @@ import StatusBar from "./StatusBar.astro";
 
   .stat-number {
     font-family: var(--font-display);
-    font-size: 1.6rem;
-    line-height: 1;
+    font-size: 1.35rem;
+    line-height: 1.1;
     color: var(--ink);
-    margin-bottom: 0.25rem;
   }
 
   .stat-label {
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 700;
     text-transform: uppercase;
     color: #444444;
