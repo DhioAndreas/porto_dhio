@@ -37,10 +37,11 @@ const {
 } = Astro.props;
 
 const hasGallery = gallery && gallery.length > 0;
-const cardId = `proj-card-${index}`;
+const previewImg = hasGallery ? gallery[0].src : image;
+const totalSlides = gallery?.length ?? 0;
 ---
 
-<div class={`project-card brutal-card ${featured ? 'project-featured' : ''}`} id={cardId}>
+<div class={`project-card brutal-card ${featured ? 'project-featured' : ''}`}>
   <!-- Top Meta Strip -->
   <div class="project-header">
     <div class="project-meta-left">
@@ -58,60 +59,36 @@ const cardId = `proj-card-${index}`;
     }
   </div>
 
-  <!-- MULTI-IMAGE GALLERY PAGINATION (Jika memiliki galeri gambar) -->
+  <!-- Clickable Preview Thumbnail → opens Lightbox Modal -->
   {
-    hasGallery ? (
-      <div class="gallery-slider-box" data-gallery-id={cardId}>
-        <!-- Top Slider Header & Counter -->
-        <div class="gallery-topbar">
-          <div class="gallery-counter mono">
-            <span class="pulse-green">●</span>
-            <span class="active-slide-num">1</span> / <span class="total-slides">{gallery.length} LAYAR</span>
-          </div>
-          <div class="gallery-nav-btns">
-            <button class="slider-btn prev-btn" aria-label="Slide sebelumnya" title="Sebelumnya">
-              <span>◀ PREV</span>
-            </button>
-            <button class="slider-btn next-btn" aria-label="Slide berikutnya" title="Berikutnya">
-              <span>NEXT ▶</span>
-            </button>
-          </div>
-        </div>
+    previewImg && (
+      <button
+        class="project-preview-btn"
+        data-title={title}
+        data-gallery={JSON.stringify(hasGallery ? gallery : [{ src: previewImg, caption: title }])}
+        aria-label={`Lihat galeri ${title}`}
+      >
+        <div class="project-media-box">
+          <img src={previewImg} alt={`Preview ${title}`} class="project-media-img" loading="lazy" />
 
-        <!-- Image Stage Area -->
-        <div class="gallery-stage">
-          {gallery.map((item, gIdx) => (
-            <div class={`slide-frame ${gIdx === 0 ? 'active' : ''}`} data-slide-index={gIdx}>
-              <img src={item.src} alt={item.caption} class="slide-img" loading="lazy" />
-              <div class="slide-caption-bar mono">
-                <span class="caption-tag">[{gIdx + 1}/{gallery.length}]</span>
-                <span class="caption-text">{item.caption}</span>
-              </div>
+          <!-- Hover overlay -->
+          <div class="preview-hover-overlay">
+            <div class="hover-icon-ring">
+              <span class="hover-icon">⊞</span>
             </div>
-          ))}
-        </div>
+            <span class="hover-label mono">KLIK UNTUK LIHAT GALERI</span>
+            {hasGallery && (
+              <span class="hover-count mono">{totalSlides} LAYAR TERSEDIA</span>
+            )}
+          </div>
 
-        <!-- Pagination Number Jump Pills -->
-        <div class="gallery-pagination-strip">
-          <span class="mono pag-label">LAYAR:</span>
-          <div class="pag-pills">
-            {gallery.map((_, pIdx) => (
-              <button class={`pag-pill mono ${pIdx === 0 ? 'active' : ''}`} data-target-slide={pIdx}>
-                {pIdx + 1}
-              </button>
-            ))}
+          <!-- Corner badge -->
+          <div class="media-corner-badge mono">
+            {hasGallery ? `◉ ${totalSlides} FOTO` : '● PREVIEW'}
           </div>
         </div>
-      </div>
-    ) : image ? (
-      /* Single Image Preview */
-      <div class="project-media-box">
-        <img src={image} alt={`Screenshot ${title}`} class="project-media-img" loading="lazy" />
-        <div class="media-overlay-badge mono">
-          <span>● LIVE SCREENSHOT</span>
-        </div>
-      </div>
-    ) : null
+      </button>
+    )
   }
 
   <!-- Title & Subtitle -->
@@ -145,6 +122,16 @@ const cardId = `proj-card-${index}`;
 
   <!-- Actions -->
   <div class="project-actions">
+    {hasGallery && (
+      <button
+        class="btn btn-sm btn-gallery"
+        data-title={title}
+        data-gallery={JSON.stringify(gallery)}
+        aria-label={`Buka galeri ${title}`}
+      >
+        <span>🖼 Lihat Galeri ({totalSlides} foto)</span>
+      </button>
+    )}
     {
       demo && (
         <a href={demo} target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary">
@@ -166,72 +153,24 @@ const cardId = `proj-card-${index}`;
 </div>
 
 <script>
-  // Dynamic Slider & Pagination Logic for all project cards with gallery
-  function initGallerySliders() {
-    const sliders = document.querySelectorAll('.gallery-slider-box');
+  function initProjectCardTriggers() {
+    document.querySelectorAll<HTMLButtonElement>('[data-gallery]').forEach((btn) => {
+      // Avoid registering duplicate listeners
+      if (btn.dataset.galleryBound === '1') return;
+      btn.dataset.galleryBound = '1';
 
-    sliders.forEach((slider) => {
-      const slides = slider.querySelectorAll('.slide-frame');
-      const pills = slider.querySelectorAll('.pag-pill');
-      const counterEl = slider.querySelector('.active-slide-num');
-      const prevBtn = slider.querySelector('.prev-btn');
-      const nextBtn = slider.querySelector('.next-btn');
-
-      let currentIdx = 0;
-      const total = slides.length;
-
-      function updateSlide(idx: number) {
-        if (idx < 0) idx = total - 1;
-        if (idx >= total) idx = 0;
-        currentIdx = idx;
-
-        slides.forEach((slide, sIdx) => {
-          if (sIdx === currentIdx) {
-            slide.classList.add('active');
-          } else {
-            slide.classList.remove('active');
-          }
-        });
-
-        pills.forEach((pill, pIdx) => {
-          if (pIdx === currentIdx) {
-            pill.classList.add('active');
-          } else {
-            pill.classList.remove('active');
-          }
-        });
-
-        if (counterEl) {
-          counterEl.textContent = String(currentIdx + 1);
-        }
-      }
-
-      if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-          updateSlide(currentIdx - 1);
-        });
-      }
-
-      if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-          updateSlide(currentIdx + 1);
-        });
-      }
-
-      pills.forEach((pill) => {
-        pill.addEventListener('click', () => {
-          const target = Number(pill.getAttribute('data-target-slide'));
-          if (!isNaN(target)) {
-            updateSlide(target);
-          }
-        });
+      btn.addEventListener('click', () => {
+        const title = btn.dataset.title ?? '';
+        const gallery = JSON.parse(btn.dataset.gallery ?? '[]');
+        document.dispatchEvent(
+          new CustomEvent('open-project-gallery', { detail: { title, gallery } })
+        );
       });
     });
   }
 
-  // Initialize on load and page swaps
-  initGallerySliders();
-  document.addEventListener('astro:page-load', initGallerySliders);
+  initProjectCardTriggers();
+  document.addEventListener('astro:page-load', initProjectCardTriggers);
 </script>
 
 <style>
@@ -292,201 +231,31 @@ const cardId = `proj-card-${index}`;
     color: var(--terminal-green);
   }
 
-  /* GALLERY PAGINATION / SLIDER CONTAINER */
-  .gallery-slider-box {
-    background: #0F1219;
-    border: 2px solid var(--ink);
-    box-shadow: 3px 3px 0 var(--ink);
-    margin-bottom: 1.25rem;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .gallery-topbar {
-    background: #181C27;
-    border-bottom: 2px solid var(--ink);
-    padding: 0.45rem 0.75rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-  }
-
-  .gallery-counter {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--signal-yellow);
-  }
-
-  .pulse-green {
-    color: var(--terminal-green);
-    animation: pulse 1.5s infinite;
-  }
-
-  .total-slides {
-    color: #94A3B8;
-  }
-
-  .gallery-nav-btns {
-    display: flex;
-    gap: 0.35rem;
-  }
-
-  .slider-btn {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 700;
-    background: var(--paper-card);
-    color: var(--ink);
-    border: 2px solid var(--ink);
-    padding: 0.2rem 0.55rem;
+  /* Clickable Preview Button */
+  .project-preview-btn {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0;
     cursor: pointer;
-    box-shadow: 2px 2px 0 var(--ink);
-    transition: all 0.1s ease;
+    margin-bottom: 1rem;
   }
 
-  .slider-btn:hover {
-    background: var(--signal-yellow);
-    transform: translate(1px, 1px);
-    box-shadow: 1px 1px 0 var(--ink);
-  }
-
-  .slider-btn:active {
-    transform: translate(2px, 2px);
-    box-shadow: 0 0 0 var(--ink);
-  }
-
-  .gallery-stage {
-    position: relative;
-    width: 100%;
-    height: 240px;
-    background: #0B0D13;
-    overflow: hidden;
-  }
-
-  .slide-frame {
-    display: none;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    inset: 0;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .slide-frame.active {
-    display: flex;
-    animation: fadeInSlide 0.2s ease;
-  }
-
-  @keyframes fadeInSlide {
-    from { opacity: 0; transform: scale(0.98); }
-    to { opacity: 1; transform: scale(1); }
-  }
-
-  .slide-img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: center;
-    background: #0A0C12;
-  }
-
-  .slide-caption-bar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(16, 18, 27, 0.92);
-    border-top: 1px solid rgba(255, 212, 0, 0.4);
-    padding: 0.35rem 0.65rem;
-    display: flex;
-    align-items: center;
-    gap: 0.45rem;
-    font-size: 0.72rem;
-    color: #F1F5F9;
-  }
-
-  .caption-tag {
-    color: var(--signal-yellow);
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-
-  .caption-text {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .gallery-pagination-strip {
-    background: #181C27;
-    border-top: 2px solid var(--ink);
-    padding: 0.4rem 0.6rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    overflow-x: auto;
-  }
-
-  .pag-label {
-    font-size: 0.68rem;
-    font-weight: 700;
-    color: #8E98B0;
-    flex-shrink: 0;
-  }
-
-  .pag-pills {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-  }
-
-  .pag-pill {
-    width: 22px;
-    height: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.68rem;
-    font-weight: 700;
-    background: #242938;
-    color: #C5CBD8;
-    border: 1px solid #3E465E;
-    cursor: pointer;
-    transition: all 0.1s ease;
-  }
-
-  .pag-pill:hover {
-    background: var(--circuit-blue);
-    color: #FFFFFF;
-    border-color: #FFFFFF;
-  }
-
-  .pag-pill.active {
-    background: var(--signal-yellow);
-    color: var(--ink);
-    font-weight: 900;
-    border-color: var(--ink);
-    box-shadow: 1px 1px 0 var(--ink);
-    transform: scale(1.1);
-  }
-
-  /* Single Image Preview Box */
   .project-media-box {
     position: relative;
     width: 100%;
     height: 200px;
-    background: #11141D;
+    background: #0F1219;
     border: 2px solid var(--ink);
-    margin-bottom: 1rem;
     overflow: hidden;
     box-shadow: 3px 3px 0 var(--ink);
+    transition: box-shadow 0.15s ease;
+  }
+
+  .project-preview-btn:hover .project-media-box {
+    box-shadow: 5px 5px 0 var(--ink);
+    border-color: var(--signal-yellow);
   }
 
   .project-media-img {
@@ -494,25 +263,86 @@ const cardId = `proj-card-${index}`;
     height: 100%;
     object-fit: cover;
     object-position: top center;
-    transition: transform 0.25s ease;
+    transition: transform 0.3s ease, filter 0.25s ease;
+    display: block;
   }
 
-  .project-card:hover .project-media-img {
+  .project-preview-btn:hover .project-media-img {
     transform: scale(1.04);
+    filter: brightness(0.6);
   }
 
-  .media-overlay-badge {
+  /* Hover Overlay */
+  .preview-hover-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    opacity: 0;
+    transition: opacity 0.22s ease;
+    pointer-events: none;
+    background: rgba(10, 12, 18, 0.35);
+  }
+
+  .project-preview-btn:hover .preview-hover-overlay {
+    opacity: 1;
+  }
+
+  .hover-icon-ring {
+    width: 52px;
+    height: 52px;
+    border: 2.5px solid var(--signal-yellow);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 212, 0, 0.12);
+    animation: ringPulse 1.2s ease infinite;
+  }
+
+  @keyframes ringPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 212, 0, 0.4); }
+    50%       { box-shadow: 0 0 0 10px rgba(255, 212, 0, 0); }
+  }
+
+  .hover-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .hover-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: 0.05em;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.8);
+  }
+
+  .hover-count {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--signal-yellow);
+    letter-spacing: 0.04em;
+  }
+
+  /* Corner Badge */
+  .media-corner-badge {
     position: absolute;
     bottom: 8px;
     right: 8px;
-    background: rgba(16, 16, 16, 0.85);
+    background: rgba(16, 16, 16, 0.88);
     color: var(--signal-yellow);
     font-size: 0.68rem;
     font-weight: 700;
     padding: 0.2rem 0.5rem;
     border: 1px solid var(--signal-yellow);
+    pointer-events: none;
   }
 
+  /* Heading Block */
   .project-heading-block {
     margin-bottom: 0.75rem;
   }
@@ -590,5 +420,19 @@ const cardId = `proj-card-${index}`;
     margin-top: auto;
     padding-top: 1rem;
     border-top: 2px dashed rgba(16, 16, 16, 0.2);
+  }
+
+  .btn-gallery {
+    background: var(--ink);
+    color: var(--signal-yellow);
+    border-color: var(--ink);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.12s ease;
+  }
+
+  .btn-gallery:hover {
+    background: var(--signal-yellow);
+    color: var(--ink);
   }
 </style>

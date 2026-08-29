@@ -1,0 +1,415 @@
+---
+---
+
+<!-- Global Project Lightbox Modal -->
+<div id="project-lightbox" class="lightbox-overlay" aria-modal="true" role="dialog" aria-label="Galeri Proyek" hidden>
+  <!-- Backdrop -->
+  <div class="lightbox-backdrop" id="lightbox-backdrop"></div>
+
+  <!-- Modal Panel -->
+  <div class="lightbox-panel">
+    <!-- Header Bar -->
+    <div class="lightbox-header">
+      <div class="lb-title-area mono">
+        <span class="lb-live-dot"></span>
+        <span id="lb-project-title" class="lb-project-name">PROJECT_GALLERY</span>
+      </div>
+      <div class="lb-header-right">
+        <span id="lb-counter" class="lb-counter mono">1 / 1</span>
+        <button id="lightbox-close" class="lb-close-btn" aria-label="Tutup galeri">
+          <span>✕ CLOSE</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Image Stage -->
+    <div class="lightbox-stage">
+      <button class="lb-nav-btn lb-prev" id="lb-prev" aria-label="Slide sebelumnya">
+        <span>◀</span>
+      </button>
+
+      <div class="lb-image-area" id="lb-image-area">
+        <img id="lb-main-img" src="" alt="" class="lb-main-img" />
+        <div class="lb-caption-overlay" id="lb-caption">
+          <span class="lb-caption-idx" id="lb-caption-idx">[1/1]</span>
+          <span class="lb-caption-text" id="lb-caption-text"></span>
+        </div>
+      </div>
+
+      <button class="lb-nav-btn lb-next" id="lb-next" aria-label="Slide berikutnya">
+        <span>▶</span>
+      </button>
+    </div>
+
+    <!-- Thumbnail Strip Pagination -->
+    <div class="lightbox-thumb-strip" id="lb-thumb-strip">
+      <!-- Thumbnails injected by JS -->
+    </div>
+  </div>
+</div>
+
+<script>
+  interface GalleryItem {
+    src: string;
+    caption: string;
+  }
+
+  let currentSlide = 0;
+  let galleryData: GalleryItem[] = [];
+
+  const lightbox = document.getElementById('project-lightbox')!;
+  const backdrop = document.getElementById('lightbox-backdrop')!;
+  const closeBtn = document.getElementById('lightbox-close')!;
+  const prevBtn = document.getElementById('lb-prev')!;
+  const nextBtn = document.getElementById('lb-next')!;
+  const mainImg = document.getElementById('lb-main-img') as HTMLImageElement;
+  const counterEl = document.getElementById('lb-counter')!;
+  const captionIdx = document.getElementById('lb-caption-idx')!;
+  const captionText = document.getElementById('lb-caption-text')!;
+  const thumbStrip = document.getElementById('lb-thumb-strip')!;
+  const titleEl = document.getElementById('lb-project-title')!;
+
+  function openLightbox(projectTitle: string, gallery: GalleryItem[], startIdx = 0) {
+    if (!gallery || gallery.length === 0) return;
+    galleryData = gallery;
+    currentSlide = startIdx;
+    titleEl.textContent = projectTitle.toUpperCase().replace(/ /g, '_');
+
+    // Build thumbnail strip
+    thumbStrip.innerHTML = '';
+    gallery.forEach((item, idx) => {
+      const thumb = document.createElement('button');
+      thumb.className = `lb-thumb ${idx === startIdx ? 'active' : ''}`;
+      thumb.setAttribute('data-idx', String(idx));
+      thumb.setAttribute('aria-label', `Slide ${idx + 1}`);
+      thumb.innerHTML = `<img src="${item.src}" alt="Thumb ${idx + 1}" />`;
+      thumb.addEventListener('click', () => goToSlide(idx));
+      thumbStrip.appendChild(thumb);
+    });
+
+    updateSlide(startIdx);
+    lightbox.removeAttribute('hidden');
+    document.body.style.overflow = 'hidden';
+    
+    // Focus trap
+    setTimeout(() => closeBtn.focus(), 50);
+  }
+
+  function closeLightbox() {
+    lightbox.setAttribute('hidden', '');
+    document.body.style.overflow = '';
+  }
+
+  function goToSlide(idx: number) {
+    if (idx < 0) idx = galleryData.length - 1;
+    if (idx >= galleryData.length) idx = 0;
+    currentSlide = idx;
+    updateSlide(idx);
+  }
+
+  function updateSlide(idx: number) {
+    const item = galleryData[idx];
+    mainImg.style.opacity = '0';
+    setTimeout(() => {
+      mainImg.src = item.src;
+      mainImg.alt = item.caption;
+      mainImg.style.opacity = '1';
+    }, 120);
+
+    counterEl.textContent = `${idx + 1} / ${galleryData.length}`;
+    captionIdx.textContent = `[${idx + 1}/${galleryData.length}]`;
+    captionText.textContent = item.caption;
+
+    // Update thumbnails
+    thumbStrip.querySelectorAll<HTMLButtonElement>('.lb-thumb').forEach((t, tIdx) => {
+      t.classList.toggle('active', tIdx === idx);
+      if (tIdx === idx) {
+        t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    });
+  }
+
+  // Event Listeners
+  closeBtn.addEventListener('click', closeLightbox);
+  backdrop.addEventListener('click', closeLightbox);
+  prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+  nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (lightbox.hasAttribute('hidden')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') goToSlide(currentSlide - 1);
+    if (e.key === 'ArrowRight') goToSlide(currentSlide + 1);
+  });
+
+  // Listen for project gallery open events
+  document.addEventListener('open-project-gallery', (e: Event) => {
+    const detail = (e as CustomEvent).detail as { title: string; gallery: GalleryItem[] };
+    openLightbox(detail.title, detail.gallery, 0);
+  });
+</script>
+
+<style>
+  .lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .lightbox-overlay[hidden] {
+    display: none;
+  }
+
+  .lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 12, 18, 0.92);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+  }
+
+  .lightbox-panel {
+    position: relative;
+    z-index: 1;
+    background: #0F1219;
+    border: 2px solid #FFD400;
+    box-shadow: 8px 8px 0 #FFD400, 0 0 60px rgba(255, 212, 0, 0.12);
+    width: 100%;
+    max-width: 860px;
+    max-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: lbSlideIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes lbSlideIn {
+    from { opacity: 0; transform: scale(0.93) translateY(12px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  /* Header */
+  .lightbox-header {
+    background: #181C27;
+    border-bottom: 2px solid #FFD400;
+    padding: 0.65rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .lb-title-area {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    overflow: hidden;
+  }
+
+  .lb-live-dot {
+    width: 8px;
+    height: 8px;
+    background: #00C853;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 8px #00C853;
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.35; }
+  }
+
+  .lb-project-name {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #FFD400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .lb-header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .lb-counter {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #94A3B8;
+    white-space: nowrap;
+  }
+
+  .lb-close-btn {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: transparent;
+    color: #F87171;
+    border: 1.5px solid #F87171;
+    padding: 0.2rem 0.65rem;
+    cursor: pointer;
+    transition: all 0.12s ease;
+  }
+
+  .lb-close-btn:hover {
+    background: #F87171;
+    color: #FFFFFF;
+  }
+
+  /* Stage */
+  .lightbox-stage {
+    position: relative;
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    min-height: 0;
+    background: #0A0C12;
+    overflow: hidden;
+  }
+
+  .lb-image-area {
+    flex: 1;
+    height: 100%;
+    min-height: 340px;
+    max-height: 60vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .lb-main-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: opacity 0.15s ease;
+    display: block;
+  }
+
+  .lb-caption-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(10, 12, 18, 0.95));
+    padding: 1.5rem 1rem 0.65rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.78rem;
+    pointer-events: none;
+  }
+
+  .lb-caption-idx {
+    color: #FFD400;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .lb-caption-text {
+    color: #E2E8F0;
+    line-height: 1.4;
+  }
+
+  /* Nav Buttons */
+  .lb-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 44px;
+    height: 60px;
+    background: rgba(16, 18, 27, 0.85);
+    border: 2px solid rgba(255, 212, 0, 0.4);
+    color: #FFD400;
+    font-size: 1.1rem;
+    font-weight: 900;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.12s ease;
+    backdrop-filter: blur(4px);
+  }
+
+  .lb-nav-btn:hover {
+    background: rgba(255, 212, 0, 0.18);
+    border-color: #FFD400;
+    box-shadow: 0 0 14px rgba(255, 212, 0, 0.25);
+  }
+
+  .lb-prev { left: 0.5rem; }
+  .lb-next { right: 0.5rem; }
+
+  /* Thumbnail Strip */
+  .lightbox-thumb-strip {
+    background: #181C27;
+    border-top: 2px solid rgba(255, 212, 0, 0.25);
+    padding: 0.55rem 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    overflow-x: auto;
+    flex-shrink: 0;
+    scrollbar-width: thin;
+    scrollbar-color: #FFD400 #181C27;
+  }
+
+  .lb-thumb {
+    flex-shrink: 0;
+    width: 62px;
+    height: 46px;
+    border: 2px solid #2E3450;
+    background: #0A0C12;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.12s ease;
+    padding: 0;
+  }
+
+  .lb-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+
+  .lb-thumb:hover {
+    border-color: #94A3B8;
+    transform: scale(1.06);
+  }
+
+  .lb-thumb.active {
+    border-color: #FFD400;
+    box-shadow: 0 0 10px rgba(255, 212, 0, 0.35);
+    transform: scale(1.1);
+  }
+
+  @media (max-width: 600px) {
+    .lightbox-panel {
+      max-width: 100%;
+    }
+    .lb-image-area {
+      min-height: 260px;
+      max-height: 48vh;
+    }
+    .lb-thumb {
+      width: 50px;
+      height: 38px;
+    }
+  }
+</style>
