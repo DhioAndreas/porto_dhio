@@ -2,227 +2,188 @@
 ---
 
 <div id="project-lightbox" class="lb-root" aria-modal="true" role="dialog" hidden>
+  <!-- Blurred backdrop -->
   <div class="lb-backdrop" id="lb-backdrop"></div>
 
+  <!-- Modal shell -->
   <div class="lb-shell">
 
-    <!-- LEFT: Image Viewer -->
-    <div class="lb-viewer">
-      <!-- Top bar -->
-      <div class="lb-viewer-bar">
-        <div class="lb-dots-row">
-          <span class="lb-os-dot red"></span>
-          <span class="lb-os-dot yellow"></span>
-          <span class="lb-os-dot green"></span>
-        </div>
-        <span id="lb-path" class="lb-path mono">/gallery/preview.jpg</span>
+    <!-- ── Top bar ── -->
+    <div class="lb-topbar">
+      <div class="lb-topbar-left">
+        <span class="lb-live-dot"></span>
+        <span class="lb-live-txt">LIVE</span>
+        <span class="lb-sep">·</span>
+        <span id="lb-title" class="lb-title-txt">Project Gallery</span>
       </div>
-
-      <!-- Image Stage -->
-      <div class="lb-img-stage" id="lb-img-stage">
-        <img id="lb-img" src="" alt="" class="lb-main-img" />
-
-        <!-- Prev / Next arrows -->
-        <button class="lb-nav-btn lb-nav-prev" id="lb-prev" aria-label="Sebelumnya">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      <div class="lb-topbar-right">
+        <span id="lb-counter" class="lb-counter">01 / 01</span>
+        <button id="lb-close" class="lb-close-btn" aria-label="Tutup">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
-        <button class="lb-nav-btn lb-nav-next" id="lb-next" aria-label="Berikutnya">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </button>
-
-        <!-- Slide index badge -->
-        <div class="lb-index-badge mono" id="lb-badge">01 / 10</div>
-      </div>
-
-      <!-- Caption -->
-      <div class="lb-caption-row">
-        <div class="lb-caption-icon">📸</div>
-        <p class="lb-caption-text" id="lb-caption">—</p>
-      </div>
-
-      <!-- Thumbnail filmstrip -->
-      <div class="lb-filmstrip" id="lb-filmstrip">
-        <!-- injected by JS -->
       </div>
     </div>
 
-    <!-- RIGHT: Info Panel -->
-    <div class="lb-info">
-      <!-- Close button -->
-      <button class="lb-close-btn" id="lb-close" aria-label="Tutup">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
+    <!-- ── Main area: image + side dots ── -->
+    <div class="lb-body">
 
-      <div class="lb-info-body">
-        <!-- Live indicator -->
-        <div class="lb-live-row mono">
-          <span class="lb-live-pulse"></span>
-          <span class="lb-live-label">PROJECT_GALLERY</span>
-        </div>
+      <!-- Image viewer -->
+      <div class="lb-viewer" id="lb-viewer">
+        <!-- Ghost arrows -->
+        <button class="lb-arrow lb-arrow-l" id="lb-prev" aria-label="Sebelumnya">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
 
-        <!-- Title -->
-        <h2 class="lb-proj-title" id="lb-proj-title">—</h2>
-
-        <!-- Divider -->
-        <div class="lb-divider"></div>
-
-        <!-- Progress indicator -->
-        <div class="lb-progress-block">
-          <div class="lb-progress-label mono">
-            <span>SLIDE</span>
-            <span id="lb-progress-num">1 / 1</span>
-          </div>
-          <div class="lb-progress-track">
-            <div class="lb-progress-fill" id="lb-progress-fill"></div>
+        <div class="lb-img-frame" id="lb-img-frame">
+          <img id="lb-img" src="" alt="" class="lb-img" />
+          <!-- Bottom caption gradient -->
+          <div class="lb-caption-overlay">
+            <p class="lb-caption-text" id="lb-caption"></p>
           </div>
         </div>
 
-        <!-- Dot indicators -->
-        <div class="lb-dot-nav" id="lb-dot-nav">
-          <!-- injected by JS -->
-        </div>
-
-        <!-- Navigation buttons -->
-        <div class="lb-ctrl-row">
-          <button class="lb-ctrl-btn" id="lb-ctrl-prev" aria-label="Sebelumnya">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-            <span>Prev</span>
-          </button>
-          <button class="lb-ctrl-btn lb-ctrl-btn-accent" id="lb-ctrl-next" aria-label="Berikutnya">
-            <span>Next</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-          </button>
-        </div>
-
-        <!-- Footer hint -->
-        <p class="lb-hint mono">ESC untuk menutup · ← → navigasi</p>
+        <button class="lb-arrow lb-arrow-r" id="lb-next" aria-label="Berikutnya">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
       </div>
+
+      <!-- Side dot track -->
+      <div class="lb-side-track">
+        <div class="lb-side-dots" id="lb-side-dots"></div>
+        <span class="lb-side-num" id="lb-side-num">01</span>
+      </div>
+
     </div>
+
+    <!-- ── Filmstrip thumbnail row ── -->
+    <div class="lb-filmstrip" id="lb-filmstrip"></div>
 
   </div>
 </div>
 
 <script>
-  interface GalleryItem { src: string; caption: string; }
+  interface GItem { src: string; caption: string; }
 
-  let idx = 0;
-  let items: GalleryItem[] = [];
+  let cur = 0;
+  let items: GItem[] = [];
 
   const lb       = document.getElementById('project-lightbox')!;
   const backdrop = document.getElementById('lb-backdrop')!;
   const imgEl    = document.getElementById('lb-img') as HTMLImageElement;
-  const badge    = document.getElementById('lb-badge')!;
+  const counter  = document.getElementById('lb-counter')!;
   const caption  = document.getElementById('lb-caption')!;
-  const pathEl   = document.getElementById('lb-path')!;
-  const titleEl  = document.getElementById('lb-proj-title')!;
-  const progNum  = document.getElementById('lb-progress-num')!;
-  const progFill = document.getElementById('lb-progress-fill') as HTMLElement;
-  const dotNav   = document.getElementById('lb-dot-nav')!;
+  const titleEl  = document.getElementById('lb-title')!;
+  const sideNum  = document.getElementById('lb-side-num')!;
+  const sideDots = document.getElementById('lb-side-dots')!;
   const filmstrip= document.getElementById('lb-filmstrip')!;
-  const closeBtns= [
-    document.getElementById('lb-close')!,
-  ];
 
-  function pad(n: number) { return String(n).padStart(2, '0'); }
+  function pad2(n: number) { return String(n).padStart(2, '0'); }
 
-  function open(title: string, gallery: GalleryItem[]) {
+  function openModal(title: string, gallery: GItem[]) {
     if (!gallery?.length) return;
     items = gallery;
-    idx = 0;
+    cur   = 0;
     titleEl.textContent = title;
 
-    // Build filmstrip thumbnails
+    // Build side dots
+    sideDots.innerHTML = '';
+    gallery.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.className = `lb-sdot${i === 0 ? ' active' : ''}`;
+      d.setAttribute('aria-label', `Slide ${i + 1}`);
+      d.addEventListener('click', () => go(i));
+      sideDots.appendChild(d);
+    });
+
+    // Build filmstrip
     filmstrip.innerHTML = '';
     gallery.forEach((item, i) => {
       const btn = document.createElement('button');
-      btn.className = `lb-film-thumb${i === 0 ? ' active' : ''}`;
-      btn.innerHTML = `<img src="${item.src}" alt="thumb ${i+1}" />`;
+      btn.className = `lb-thumb${i === 0 ? ' active' : ''}`;
+      btn.setAttribute('aria-label', `Foto ${i + 1}`);
+      btn.innerHTML = `<img src="${item.src}" alt="thumb ${i+1}" loading="lazy"/>`;
       btn.addEventListener('click', () => go(i));
       filmstrip.appendChild(btn);
     });
 
-    // Build dot nav
-    dotNav.innerHTML = '';
-    gallery.forEach((_, i) => {
-      const d = document.createElement('button');
-      d.className = `lb-dot-btn${i === 0 ? ' active' : ''}`;
-      d.setAttribute('aria-label', `Slide ${i+1}`);
-      d.addEventListener('click', () => go(i));
-      dotNav.appendChild(d);
-    });
-
     go(0);
     lb.removeAttribute('hidden');
-    lb.classList.add('is-open');
+    requestAnimationFrame(() => lb.classList.add('open'));
     document.body.style.overflow = 'hidden';
+    setTimeout(() => document.getElementById('lb-close')?.focus(), 60);
   }
 
-  function close() {
-    lb.classList.remove('is-open');
+  function closeModal() {
+    lb.classList.remove('open');
     setTimeout(() => {
       lb.setAttribute('hidden', '');
       document.body.style.overflow = '';
-    }, 220);
+    }, 280);
   }
 
   function go(i: number) {
     if (i < 0) i = items.length - 1;
     if (i >= items.length) i = 0;
-    idx = i;
-    const item = items[i];
+    cur = i;
 
-    // Fade image
-    imgEl.style.opacity = '0';
-    imgEl.style.transform = 'scale(0.97)';
+    const item = items[i];
+    const total = items.length;
+
+    // Transition image
+    imgEl.classList.add('lb-img-exit');
     setTimeout(() => {
       imgEl.src = item.src;
       imgEl.alt = item.caption;
-      imgEl.style.opacity = '1';
-      imgEl.style.transform = 'scale(1)';
-    }, 110);
+      imgEl.classList.remove('lb-img-exit');
+    }, 130);
 
-    const total = items.length;
-    badge.textContent = `${pad(i + 1)} / ${pad(total)}`;
-    caption.textContent = item.caption;
-    pathEl.textContent = `/gallery/${item.src.split('/').pop()}`;
-    progNum.textContent = `${i + 1} / ${total}`;
-    progFill.style.width = `${((i + 1) / total) * 100}%`;
+    caption.textContent  = item.caption;
+    counter.textContent  = `${pad2(i + 1)} / ${pad2(total)}`;
+    sideNum.textContent  = pad2(i + 1);
 
-    // Update thumbnails
-    filmstrip.querySelectorAll<HTMLButtonElement>('.lb-film-thumb').forEach((t, ti) => {
+    // Sync dots
+    sideDots.querySelectorAll<HTMLButtonElement>('.lb-sdot').forEach((d, di) =>
+      d.classList.toggle('active', di === i)
+    );
+
+    // Sync filmstrip
+    filmstrip.querySelectorAll<HTMLButtonElement>('.lb-thumb').forEach((t, ti) => {
       t.classList.toggle('active', ti === i);
       if (ti === i) t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     });
-
-    // Update dots
-    dotNav.querySelectorAll<HTMLButtonElement>('.lb-dot-btn').forEach((d, di) => {
-      d.classList.toggle('active', di === i);
-    });
   }
 
-  // Events
-  closeBtns.forEach(b => b.addEventListener('click', close));
-  backdrop.addEventListener('click', close);
-  document.getElementById('lb-prev')!.addEventListener('click', () => go(idx - 1));
-  document.getElementById('lb-next')!.addEventListener('click', () => go(idx + 1));
-  document.getElementById('lb-ctrl-prev')!.addEventListener('click', () => go(idx - 1));
-  document.getElementById('lb-ctrl-next')!.addEventListener('click', () => go(idx + 1));
+  // Wire up controls
+  document.getElementById('lb-close')!.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', closeModal);
+  document.getElementById('lb-prev')!.addEventListener('click', () => go(cur - 1));
+  document.getElementById('lb-next')!.addEventListener('click', () => go(cur + 1));
 
-  document.addEventListener('keydown', (e) => {
+  // Keyboard
+  document.addEventListener('keydown', e => {
     if (lb.hasAttribute('hidden')) return;
-    if (e.key === 'Escape')     close();
-    if (e.key === 'ArrowLeft')  go(idx - 1);
-    if (e.key === 'ArrowRight') go(idx + 1);
+    if (e.key === 'Escape')     closeModal();
+    if (e.key === 'ArrowLeft')  go(cur - 1);
+    if (e.key === 'ArrowRight') go(cur + 1);
   });
 
+  // Touch swipe
+  let touchX = 0;
+  lb.addEventListener('touchstart', e => { touchX = e.changedTouches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) dx < 0 ? go(cur + 1) : go(cur - 1);
+  });
+
+  // External trigger
   document.addEventListener('open-project-gallery', (e: Event) => {
-    const d = (e as CustomEvent).detail as { title: string; gallery: GalleryItem[] };
-    open(d.title, d.gallery);
+    const d = (e as CustomEvent).detail as { title: string; gallery: GItem[] };
+    openModal(d.title, d.gallery);
   });
 </script>
 
 <style>
-/* ─── Root overlay ───────────────────────────────────────── */
+/* ── Root ── */
 .lb-root {
   position: fixed;
   inset: 0;
@@ -230,241 +191,119 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.25rem;
+  padding: 1rem;
+  opacity: 0;
+  transition: opacity 0.28s ease;
 }
 .lb-root[hidden] { display: none; }
+.lb-root.open    { opacity: 1; }
 
+/* Backdrop */
 .lb-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(6, 8, 14, 0.82);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(4, 5, 9, 0.86);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   cursor: pointer;
 }
 
-/* ─── Shell: split left + right ─────────────────────────── */
+/* Shell */
 .lb-shell {
   position: relative;
   z-index: 1;
-  display: flex;
   width: 100%;
-  max-width: 820px;
-  max-height: 90vh;
-  background: #0E1118;
-  border: 1px solid rgba(255,255,255,0.09);
-  border-radius: 14px;
+  max-width: 900px;
+  background: #0A0B10;
+  border: 1px solid rgba(255,255,255,0.085);
+  border-radius: 16px;
   overflow: hidden;
   box-shadow:
-    0 32px 80px rgba(0,0,0,0.75),
     0 0 0 1px rgba(255,255,255,0.03),
-    inset 0 1px 0 rgba(255,255,255,0.07);
-  animation: lbIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.lb-root.is-open .lb-shell { animation: lbIn 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
-
-@keyframes lbIn {
-  from { opacity: 0; transform: scale(0.92) translateY(16px); }
-  to   { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-/* ─── LEFT: Viewer ───────────────────────────────────────── */
-.lb-viewer {
-  flex: 1 1 auto;
+    0 40px 100px rgba(0,0,0,0.8),
+    0 8px 32px rgba(0,0,0,0.5);
+  transform: scale(0.93) translateY(20px);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
-  min-width: 0;
-  border-right: 1px solid rgba(255,255,255,0.07);
+  max-height: 90vh;
+}
+.lb-root.open .lb-shell {
+  transform: scale(1) translateY(0);
 }
 
-/* macOS-style top bar */
-.lb-viewer-bar {
+/* ── Top bar ── */
+.lb-topbar {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  padding: 0.6rem 0.85rem;
-  background: rgba(255,255,255,0.03);
+  justify-content: space-between;
+  padding: 0.7rem 1.1rem;
   border-bottom: 1px solid rgba(255,255,255,0.06);
   flex-shrink: 0;
+  gap: 1rem;
 }
 
-.lb-dots-row {
+.lb-topbar-left {
   display: flex;
-  gap: 5px;
-  flex-shrink: 0;
+  align-items: center;
+  gap: 0.5rem;
+  overflow: hidden;
 }
 
-.lb-os-dot {
-  width: 11px;
-  height: 11px;
+.lb-live-dot {
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
+  background: #22C55E;
+  box-shadow: 0 0 8px rgba(34,197,94,0.7);
+  flex-shrink: 0;
+  animation: lbPulse 2s infinite;
 }
-.lb-os-dot.red    { background: #FF5F57; }
-.lb-os-dot.yellow { background: #FFBD2E; }
-.lb-os-dot.green  { background: #28CA41; }
+@keyframes lbPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-.lb-path {
-  font-size: 0.68rem;
-  color: rgba(255,255,255,0.28);
-  letter-spacing: 0.02em;
+.lb-live-txt {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #22C55E;
+  letter-spacing: 0.08em;
+}
+
+.lb-sep {
+  color: rgba(255,255,255,0.18);
+  font-size: 0.75rem;
+}
+
+.lb-title-txt {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.82);
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
-/* Image stage */
-.lb-img-stage {
-  position: relative;
-  flex: 1 1 auto;
-  background: #070910;
+.lb-topbar-right {
   display: flex;
   align-items: center;
-  justify-content: center;
-  min-height: 280px;
-  overflow: hidden;
+  gap: 0.85rem;
+  flex-shrink: 0;
 }
 
-.lb-main-img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  transition: opacity 0.12s ease, transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
-  display: block;
-  user-select: none;
-}
-
-/* Arrow nav */
-.lb-nav-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(14, 17, 24, 0.7);
-  border: 1px solid rgba(255,255,255,0.14);
-  color: rgba(255,255,255,0.75);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  backdrop-filter: blur(6px);
-}
-.lb-nav-btn:hover {
-  background: rgba(255,255,255,0.14);
-  color: #fff;
-  border-color: rgba(255,255,255,0.3);
-  transform: translateY(-50%) scale(1.08);
-}
-.lb-nav-prev { left: 0.65rem; }
-.lb-nav-next { right: 0.65rem; }
-
-/* Slide index badge */
-.lb-index-badge {
-  position: absolute;
-  bottom: 0.6rem;
-  right: 0.6rem;
-  background: rgba(0,0,0,0.55);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 20px;
-  color: rgba(255,255,255,0.6);
-  font-size: 0.65rem;
+.lb-counter {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.72rem;
   font-weight: 700;
-  padding: 0.2rem 0.6rem;
+  color: rgba(255,255,255,0.3);
   letter-spacing: 0.06em;
-  pointer-events: none;
-  backdrop-filter: blur(4px);
-}
-
-/* Caption row */
-.lb-caption-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.45rem;
-  padding: 0.55rem 0.85rem;
-  border-top: 1px solid rgba(255,255,255,0.05);
-  flex-shrink: 0;
-}
-
-.lb-caption-icon {
-  font-size: 0.78rem;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-
-.lb-caption-text {
-  font-size: 0.73rem;
-  color: rgba(255,255,255,0.45);
-  line-height: 1.45;
-  font-family: var(--font-mono, monospace);
-}
-
-/* Filmstrip */
-.lb-filmstrip {
-  display: flex;
-  gap: 5px;
-  padding: 0.55rem 0.75rem;
-  background: rgba(0,0,0,0.2);
-  border-top: 1px solid rgba(255,255,255,0.05);
-  overflow-x: auto;
-  flex-shrink: 0;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.1) transparent;
-}
-
-.lb-film-thumb {
-  flex-shrink: 0;
-  width: 50px;
-  height: 36px;
-  border-radius: 4px;
-  border: 1.5px solid transparent;
-  background: rgba(255,255,255,0.04);
-  overflow: hidden;
-  cursor: pointer;
-  padding: 0;
-  opacity: 0.45;
-  transition: all 0.15s ease;
-}
-.lb-film-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
-  display: block;
-}
-.lb-film-thumb:hover {
-  opacity: 0.75;
-  border-color: rgba(255,255,255,0.2);
-}
-.lb-film-thumb.active {
-  opacity: 1;
-  border-color: #FFD400;
-  box-shadow: 0 0 0 2px rgba(255,212,0,0.2);
-}
-
-/* ─── RIGHT: Info Panel ──────────────────────────────────── */
-.lb-info {
-  width: 220px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  background: linear-gradient(160deg, #111520 0%, #0C0E16 100%);
-  padding: 1.25rem 1.1rem 1rem;
-  position: relative;
 }
 
 .lb-close-btn {
-  position: absolute;
-  top: 0.85rem;
-  right: 0.85rem;
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  background: rgba(255,255,255,0.05);
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
   border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.05);
   color: rgba(255,255,255,0.5);
   display: flex;
   align-items: center;
@@ -473,187 +312,203 @@
   transition: all 0.15s ease;
 }
 .lb-close-btn:hover {
-  background: rgba(248,113,113,0.15);
-  border-color: rgba(248,113,113,0.4);
-  color: #F87171;
+  background: rgba(239,68,68,0.15);
+  border-color: rgba(239,68,68,0.35);
+  color: #EF4444;
 }
 
-.lb-info-body {
-  flex: 1;
+/* ── Body (image + side track) ── */
+.lb-body {
+  flex: 1 1 auto;
   display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
-  padding-top: 0.25rem;
-}
-
-/* Live row */
-.lb-live-row {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.62rem;
-  font-weight: 700;
-  color: rgba(255,255,255,0.3);
-  letter-spacing: 0.06em;
-}
-
-.lb-live-pulse {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #00C853;
-  box-shadow: 0 0 5px #00C853;
-  animation: blink 2.2s infinite;
-}
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.25; }
-}
-
-/* Project title */
-.lb-proj-title {
-  font-size: 1.05rem;
-  line-height: 1.3;
-  color: #fff;
-  font-weight: 700;
-  padding-right: 2rem;
-  margin: 0;
-}
-
-.lb-divider {
-  height: 1px;
-  background: linear-gradient(90deg, rgba(255,212,0,0.35), transparent);
-}
-
-/* Progress */
-.lb-progress-block {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.lb-progress-label {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.64rem;
-  font-weight: 700;
-  color: rgba(255,255,255,0.3);
-  letter-spacing: 0.05em;
-}
-
-.lb-progress-track {
-  height: 3px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 2px;
+  min-height: 0;
   overflow: hidden;
 }
 
-.lb-progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #FFD400, #FFA500);
-  border-radius: 2px;
-  transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Dot nav */
-.lb-dot-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-
-.lb-dot-btn {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.15);
-  border: none;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  padding: 0;
-}
-.lb-dot-btn:hover { background: rgba(255,255,255,0.35); }
-.lb-dot-btn.active {
-  background: #FFD400;
-  width: 20px;
-  border-radius: 4px;
-  box-shadow: 0 0 6px rgba(255,212,0,0.4);
-}
-
-/* Control buttons */
-.lb-ctrl-row {
-  display: flex;
-  gap: 0.4rem;
-  margin-top: auto;
-}
-
-.lb-ctrl-btn {
-  flex: 1;
+/* Image viewer */
+.lb-viewer {
+  flex: 1 1 auto;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.3rem;
-  padding: 0.5rem 0.5rem;
-  font-family: var(--font-subhead, sans-serif);
-  font-size: 0.75rem;
-  font-weight: 700;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 6px;
-  color: rgba(255,255,255,0.6);
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-.lb-ctrl-btn:hover {
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-  border-color: rgba(255,255,255,0.25);
+  background: #050608;
+  min-height: 0;
+  overflow: hidden;
 }
 
-.lb-ctrl-btn-accent {
-  background: rgba(255,212,0,0.1);
-  border-color: rgba(255,212,0,0.3);
-  color: #FFD400;
-}
-.lb-ctrl-btn-accent:hover {
-  background: rgba(255,212,0,0.18);
-  border-color: rgba(255,212,0,0.55);
-  color: #FFD400;
+.lb-img-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Footer hint */
-.lb-hint {
-  font-size: 0.6rem;
-  color: rgba(255,255,255,0.2);
-  letter-spacing: 0.03em;
-  text-align: center;
+.lb-img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  user-select: none;
+  transition: opacity 0.13s ease, transform 0.2s cubic-bezier(0.22,1,0.36,1);
+}
+
+.lb-img.lb-img-exit {
+  opacity: 0;
+  transform: scale(0.97);
+}
+
+/* Caption overlay */
+.lb-caption-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(5,6,8,0.96) 0%, rgba(5,6,8,0.5) 60%, transparent 100%);
+  padding: 2.5rem 1.25rem 0.85rem;
+  pointer-events: none;
+}
+
+.lb-caption-text {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.62);
+  line-height: 1.5;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
   margin: 0;
 }
 
-/* ─── Mobile responsive ──────────────────────────────────── */
-@media (max-width: 640px) {
-  .lb-shell {
-    flex-direction: column;
-    max-height: 95vh;
-    border-radius: 12px;
-  }
-  .lb-viewer {
-    border-right: none;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
-  }
-  .lb-info {
-    width: 100%;
-    padding: 0.85rem 1rem;
-  }
-  .lb-info-body {
-    gap: 0.6rem;
-  }
-  .lb-proj-title {
-    font-size: 0.9rem;
-    padding-right: 2.5rem;
-  }
-  .lb-img-stage {
-    min-height: 200px;
-  }
+/* Ghost arrows */
+.lb-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(10,11,16,0.6);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease, background 0.15s ease, transform 0.15s ease, color 0.15s ease;
+  backdrop-filter: blur(8px);
+}
+.lb-viewer:hover .lb-arrow { opacity: 1; }
+.lb-arrow:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.28);
+  color: #fff;
+  transform: translateY(-50%) scale(1.1);
+}
+.lb-arrow-l { left: 0.75rem; }
+.lb-arrow-r { right: 0.75rem; }
+
+/* ── Side dot track ── */
+.lb-side-track {
+  width: 44px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  border-left: 1px solid rgba(255,255,255,0.05);
+  padding: 1rem 0;
+  background: rgba(0,0,0,0.2);
+}
+
+.lb-side-dots {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.lb-sdot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s cubic-bezier(0.22,1,0.36,1);
+}
+.lb-sdot:hover   { background: rgba(255,255,255,0.4); }
+.lb-sdot.active  {
+  height: 18px;
+  border-radius: 3px;
+  background: #F59E0B;
+  box-shadow: 0 0 8px rgba(245,158,11,0.5);
+}
+
+.lb-side-num {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.04em;
+  margin-top: 0.25rem;
+}
+
+/* ── Filmstrip ── */
+.lb-filmstrip {
+  display: flex;
+  gap: 6px;
+  padding: 0.6rem 0.85rem;
+  background: rgba(0,0,0,0.35);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  overflow-x: auto;
+  flex-shrink: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.08) transparent;
+}
+
+.lb-thumb {
+  flex-shrink: 0;
+  width: 58px;
+  height: 42px;
+  border-radius: 5px;
+  border: 1.5px solid rgba(255,255,255,0.07);
+  background: rgba(255,255,255,0.03);
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.38;
+  transition: all 0.15s ease;
+}
+.lb-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+.lb-thumb:hover {
+  opacity: 0.7;
+  border-color: rgba(255,255,255,0.2);
+  transform: scale(1.06);
+}
+.lb-thumb.active {
+  opacity: 1;
+  border-color: #F59E0B;
+  box-shadow: 0 0 0 2px rgba(245,158,11,0.25), 0 0 12px rgba(245,158,11,0.15);
+}
+
+/* ── Mobile ── */
+@media (max-width: 580px) {
+  .lb-root { padding: 0.5rem; }
+  .lb-shell { max-height: 96vh; border-radius: 12px; }
+  .lb-side-track { display: none; }
+  .lb-img-frame { min-height: 240px; }
+  .lb-thumb { width: 44px; height: 32px; }
+  .lb-title-txt { font-size: 0.78rem; }
 }
 </style>
