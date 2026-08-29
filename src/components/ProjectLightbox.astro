@@ -3,154 +3,127 @@
 
 <!-- Global Project Lightbox Modal -->
 <div id="project-lightbox" class="lightbox-overlay" aria-modal="true" role="dialog" aria-label="Galeri Proyek" hidden>
-  <!-- Backdrop -->
   <div class="lightbox-backdrop" id="lightbox-backdrop"></div>
 
-  <!-- Modal Panel -->
   <div class="lightbox-panel">
-    <!-- Header Bar -->
-    <div class="lightbox-header">
-      <div class="lb-title-area mono">
-        <span class="lb-live-dot"></span>
-        <span id="lb-project-title" class="lb-project-name">PROJECT_GALLERY</span>
+    <!-- Header -->
+    <div class="lb-header">
+      <div class="lb-header-left">
+        <span class="lb-dot"></span>
+        <span id="lb-project-title" class="lb-title mono">PROJECT</span>
       </div>
       <div class="lb-header-right">
         <span id="lb-counter" class="lb-counter mono">1 / 1</span>
-        <button id="lightbox-close" class="lb-close-btn" aria-label="Tutup galeri">
-          <span>✕ CLOSE</span>
-        </button>
+        <button id="lightbox-close" class="lb-close" aria-label="Tutup">✕</button>
       </div>
     </div>
 
-    <!-- Main Image Stage -->
-    <div class="lightbox-stage">
-      <button class="lb-nav-btn lb-prev" id="lb-prev" aria-label="Slide sebelumnya">
-        <span>◀</span>
-      </button>
-
-      <div class="lb-image-area" id="lb-image-area">
-        <img id="lb-main-img" src="" alt="" class="lb-main-img" />
-        <div class="lb-caption-overlay" id="lb-caption">
-          <span class="lb-caption-idx" id="lb-caption-idx">[1/1]</span>
-          <span class="lb-caption-text" id="lb-caption-text"></span>
+    <!-- Image Stage -->
+    <div class="lb-stage">
+      <button class="lb-arrow lb-arrow-left" id="lb-prev" aria-label="Sebelumnya">‹</button>
+      <div class="lb-img-wrap">
+        <img id="lb-main-img" src="" alt="" class="lb-img" />
+        <div class="lb-caption" id="lb-caption">
+          <span class="lb-caption-num" id="lb-caption-idx"></span>
+          <span id="lb-caption-text"></span>
         </div>
       </div>
-
-      <button class="lb-nav-btn lb-next" id="lb-next" aria-label="Slide berikutnya">
-        <span>▶</span>
-      </button>
+      <button class="lb-arrow lb-arrow-right" id="lb-next" aria-label="Berikutnya">›</button>
     </div>
 
-    <!-- Thumbnail Strip Pagination -->
-    <div class="lightbox-thumb-strip" id="lb-thumb-strip">
-      <!-- Thumbnails injected by JS -->
-    </div>
+    <!-- Thumbnail Strip -->
+    <div class="lb-thumbs" id="lb-thumb-strip"></div>
   </div>
 </div>
 
 <script>
-  interface GalleryItem {
-    src: string;
-    caption: string;
-  }
+  interface GalleryItem { src: string; caption: string; }
 
-  let currentSlide = 0;
-  let galleryData: GalleryItem[] = [];
+  let currentIdx = 0;
+  let gallery: GalleryItem[] = [];
 
-  const lightbox = document.getElementById('project-lightbox')!;
+  const lb       = document.getElementById('project-lightbox')!;
   const backdrop = document.getElementById('lightbox-backdrop')!;
   const closeBtn = document.getElementById('lightbox-close')!;
-  const prevBtn = document.getElementById('lb-prev')!;
-  const nextBtn = document.getElementById('lb-next')!;
-  const mainImg = document.getElementById('lb-main-img') as HTMLImageElement;
-  const counterEl = document.getElementById('lb-counter')!;
-  const captionIdx = document.getElementById('lb-caption-idx')!;
-  const captionText = document.getElementById('lb-caption-text')!;
-  const thumbStrip = document.getElementById('lb-thumb-strip')!;
-  const titleEl = document.getElementById('lb-project-title')!;
+  const prevBtn  = document.getElementById('lb-prev')!;
+  const nextBtn  = document.getElementById('lb-next')!;
+  const img      = document.getElementById('lb-main-img') as HTMLImageElement;
+  const counter  = document.getElementById('lb-counter')!;
+  const capIdx   = document.getElementById('lb-caption-idx')!;
+  const capText  = document.getElementById('lb-caption-text')!;
+  const thumbs   = document.getElementById('lb-thumb-strip')!;
+  const titleEl  = document.getElementById('lb-project-title')!;
 
-  function openLightbox(projectTitle: string, gallery: GalleryItem[], startIdx = 0) {
-    if (!gallery || gallery.length === 0) return;
-    galleryData = gallery;
-    currentSlide = startIdx;
-    titleEl.textContent = projectTitle.toUpperCase().replace(/ /g, '_');
+  function open(title: string, items: GalleryItem[]) {
+    if (!items?.length) return;
+    gallery    = items;
+    currentIdx = 0;
+    titleEl.textContent = title.toUpperCase().replace(/ /g, '_');
 
-    // Build thumbnail strip
-    thumbStrip.innerHTML = '';
-    gallery.forEach((item, idx) => {
-      const thumb = document.createElement('button');
-      thumb.className = `lb-thumb ${idx === startIdx ? 'active' : ''}`;
-      thumb.setAttribute('data-idx', String(idx));
-      thumb.setAttribute('aria-label', `Slide ${idx + 1}`);
-      thumb.innerHTML = `<img src="${item.src}" alt="Thumb ${idx + 1}" />`;
-      thumb.addEventListener('click', () => goToSlide(idx));
-      thumbStrip.appendChild(thumb);
+    thumbs.innerHTML = '';
+    items.forEach((item, i) => {
+      const btn = document.createElement('button');
+      btn.className = `lb-thumb${i === 0 ? ' active' : ''}`;
+      btn.setAttribute('aria-label', `Foto ${i + 1}`);
+      btn.innerHTML = `<img src="${item.src}" alt="thumb ${i+1}" />`;
+      btn.addEventListener('click', () => go(i));
+      thumbs.appendChild(btn);
     });
 
-    updateSlide(startIdx);
-    lightbox.removeAttribute('hidden');
+    go(0);
+    lb.removeAttribute('hidden');
     document.body.style.overflow = 'hidden';
-    
-    // Focus trap
     setTimeout(() => closeBtn.focus(), 50);
   }
 
-  function closeLightbox() {
-    lightbox.setAttribute('hidden', '');
+  function close() {
+    lb.setAttribute('hidden', '');
     document.body.style.overflow = '';
   }
 
-  function goToSlide(idx: number) {
-    if (idx < 0) idx = galleryData.length - 1;
-    if (idx >= galleryData.length) idx = 0;
-    currentSlide = idx;
-    updateSlide(idx);
-  }
+  function go(i: number) {
+    if (i < 0) i = gallery.length - 1;
+    if (i >= gallery.length) i = 0;
+    currentIdx = i;
+    const item = gallery[i];
 
-  function updateSlide(idx: number) {
-    const item = galleryData[idx];
-    mainImg.style.opacity = '0';
+    img.style.opacity = '0';
     setTimeout(() => {
-      mainImg.src = item.src;
-      mainImg.alt = item.caption;
-      mainImg.style.opacity = '1';
-    }, 120);
+      img.src = item.src;
+      img.alt = item.caption;
+      img.style.opacity = '1';
+    }, 100);
 
-    counterEl.textContent = `${idx + 1} / ${galleryData.length}`;
-    captionIdx.textContent = `[${idx + 1}/${galleryData.length}]`;
-    captionText.textContent = item.caption;
+    counter.textContent  = `${i + 1} / ${gallery.length}`;
+    capIdx.textContent   = `${i + 1}/${gallery.length}`;
+    capText.textContent  = item.caption;
 
-    // Update thumbnails
-    thumbStrip.querySelectorAll<HTMLButtonElement>('.lb-thumb').forEach((t, tIdx) => {
-      t.classList.toggle('active', tIdx === idx);
-      if (tIdx === idx) {
-        t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-      }
+    thumbs.querySelectorAll<HTMLButtonElement>('.lb-thumb').forEach((t, ti) => {
+      t.classList.toggle('active', ti === i);
+      if (ti === i) t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     });
   }
 
-  // Event Listeners
-  closeBtn.addEventListener('click', closeLightbox);
-  backdrop.addEventListener('click', closeLightbox);
-  prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
-  nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+  closeBtn.addEventListener('click', close);
+  backdrop.addEventListener('click', close);
+  prevBtn.addEventListener('click', () => go(currentIdx - 1));
+  nextBtn.addEventListener('click', () => go(currentIdx + 1));
 
-  // Keyboard navigation
   document.addEventListener('keydown', (e) => {
-    if (lightbox.hasAttribute('hidden')) return;
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowLeft') goToSlide(currentSlide - 1);
-    if (e.key === 'ArrowRight') goToSlide(currentSlide + 1);
+    if (lb.hasAttribute('hidden')) return;
+    if (e.key === 'Escape')     close();
+    if (e.key === 'ArrowLeft')  go(currentIdx - 1);
+    if (e.key === 'ArrowRight') go(currentIdx + 1);
   });
 
-  // Listen for project gallery open events
   document.addEventListener('open-project-gallery', (e: Event) => {
-    const detail = (e as CustomEvent).detail as { title: string; gallery: GalleryItem[] };
-    openLightbox(detail.title, detail.gallery, 0);
+    const d = (e as CustomEvent).detail as { title: string; gallery: GalleryItem[] };
+    open(d.title, d.gallery);
   });
 </script>
 
 <style>
+  /* Overlay */
   .lightbox-overlay {
     position: fixed;
     inset: 0;
@@ -160,77 +133,76 @@
     justify-content: center;
     padding: 1rem;
   }
-
-  .lightbox-overlay[hidden] {
-    display: none;
-  }
+  .lightbox-overlay[hidden] { display: none; }
 
   .lightbox-backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(10, 12, 18, 0.92);
-    backdrop-filter: blur(6px);
+    background: rgba(8, 10, 16, 0.88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     cursor: pointer;
   }
 
+  /* Panel */
   .lightbox-panel {
     position: relative;
     z-index: 1;
-    background: #0F1219;
-    border: 2px solid #FFD400;
-    box-shadow: 8px 8px 0 #FFD400, 0 0 60px rgba(255, 212, 0, 0.12);
     width: 100%;
-    max-width: 860px;
-    max-height: 92vh;
-    display: flex;
-    flex-direction: column;
+    max-width: 520px;
+    background: #13161F;
+    border: 1.5px solid rgba(255, 212, 0, 0.55);
+    border-radius: 4px;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.04),
+      0 24px 64px rgba(0,0,0,0.7),
+      0 0 40px rgba(255, 212, 0, 0.06);
     overflow: hidden;
-    animation: lbSlideIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: popIn 0.2s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  @keyframes lbSlideIn {
-    from { opacity: 0; transform: scale(0.93) translateY(12px); }
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.9) translateY(10px); }
     to   { opacity: 1; transform: scale(1) translateY(0); }
   }
 
   /* Header */
-  .lightbox-header {
-    background: #181C27;
-    border-bottom: 2px solid #FFD400;
-    padding: 0.65rem 1rem;
+  .lb-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.75rem;
-    flex-shrink: 0;
+    padding: 0.5rem 0.75rem;
+    background: #0D0F17;
+    border-bottom: 1px solid rgba(255, 212, 0, 0.2);
+    gap: 0.5rem;
   }
 
-  .lb-title-area {
+  .lb-header-left {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
     overflow: hidden;
   }
 
-  .lb-live-dot {
-    width: 8px;
-    height: 8px;
-    background: #00C853;
+  .lb-dot {
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
+    background: #00C853;
+    box-shadow: 0 0 6px #00C853;
     flex-shrink: 0;
-    box-shadow: 0 0 8px #00C853;
-    animation: pulse 1.5s infinite;
+    animation: blink 2s infinite;
   }
-
-  @keyframes pulse {
+  @keyframes blink {
     0%, 100% { opacity: 1; }
-    50%       { opacity: 0.35; }
+    50% { opacity: 0.3; }
   }
 
-  .lb-project-name {
-    font-size: 0.8rem;
+  .lb-title {
+    font-size: 0.7rem;
     font-weight: 700;
     color: #FFD400;
+    letter-spacing: 0.04em;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -239,177 +211,159 @@
   .lb-header-right {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.6rem;
     flex-shrink: 0;
   }
 
   .lb-counter {
-    font-size: 0.78rem;
-    font-weight: 700;
-    color: #94A3B8;
-    white-space: nowrap;
+    font-size: 0.68rem;
+    color: #64748B;
+    font-weight: 600;
   }
 
-  .lb-close-btn {
-    font-family: var(--font-mono, monospace);
-    font-size: 0.75rem;
-    font-weight: 700;
-    background: transparent;
+  .lb-close {
+    width: 26px;
+    height: 26px;
+    background: rgba(248, 113, 113, 0.1);
+    border: 1px solid rgba(248, 113, 113, 0.35);
+    border-radius: 3px;
     color: #F87171;
-    border: 1.5px solid #F87171;
-    padding: 0.2rem 0.65rem;
+    font-size: 0.9rem;
+    line-height: 1;
     cursor: pointer;
-    transition: all 0.12s ease;
-  }
-
-  .lb-close-btn:hover {
-    background: #F87171;
-    color: #FFFFFF;
-  }
-
-  /* Stage */
-  .lightbox-stage {
-    position: relative;
-    flex: 1 1 auto;
-    display: flex;
-    align-items: center;
-    min-height: 0;
-    background: #0A0C12;
-    overflow: hidden;
-  }
-
-  .lb-image-area {
-    flex: 1;
-    height: 100%;
-    min-height: 340px;
-    max-height: 60vh;
-    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    transition: all 0.15s ease;
+  }
+  .lb-close:hover {
+    background: #F87171;
+    color: #fff;
+    border-color: #F87171;
   }
 
-  .lb-main-img {
+  /* Stage */
+  .lb-stage {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #090B12;
+  }
+
+  .lb-img-wrap {
+    flex: 1;
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lb-img {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    transition: opacity 0.15s ease;
+    transition: opacity 0.12s ease;
     display: block;
   }
 
-  .lb-caption-overlay {
+  /* Caption */
+  .lb-caption {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(transparent, rgba(10, 12, 18, 0.95));
-    padding: 1.5rem 1rem 0.65rem;
+    padding: 1.5rem 0.75rem 0.5rem;
+    background: linear-gradient(transparent, rgba(8, 10, 16, 0.95));
+    font-family: var(--font-mono, monospace);
+    font-size: 0.68rem;
+    color: #CBD5E1;
     display: flex;
     align-items: flex-end;
-    gap: 0.5rem;
-    font-family: var(--font-mono, monospace);
-    font-size: 0.78rem;
+    gap: 0.4rem;
     pointer-events: none;
   }
 
-  .lb-caption-idx {
+  .lb-caption-num {
     color: #FFD400;
     font-weight: 700;
     flex-shrink: 0;
   }
 
-  .lb-caption-text {
-    color: #E2E8F0;
-    line-height: 1.4;
-  }
-
-  /* Nav Buttons */
-  .lb-nav-btn {
+  /* Arrow buttons */
+  .lb-arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     z-index: 2;
-    width: 44px;
-    height: 60px;
-    background: rgba(16, 18, 27, 0.85);
-    border: 2px solid rgba(255, 212, 0, 0.4);
-    color: #FFD400;
-    font-size: 1.1rem;
-    font-weight: 900;
+    width: 32px;
+    height: 56px;
+    background: rgba(13, 15, 23, 0.75);
+    border: 1px solid rgba(255, 212, 0, 0.2);
+    color: rgba(255, 212, 0, 0.8);
+    font-size: 1.6rem;
+    line-height: 1;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.12s ease;
+    transition: all 0.15s ease;
     backdrop-filter: blur(4px);
   }
-
-  .lb-nav-btn:hover {
-    background: rgba(255, 212, 0, 0.18);
-    border-color: #FFD400;
-    box-shadow: 0 0 14px rgba(255, 212, 0, 0.25);
+  .lb-arrow:hover {
+    background: rgba(255, 212, 0, 0.12);
+    color: #FFD400;
+    border-color: rgba(255, 212, 0, 0.5);
   }
-
-  .lb-prev { left: 0.5rem; }
-  .lb-next { right: 0.5rem; }
+  .lb-arrow-left  { left: 0; border-radius: 0 3px 3px 0; }
+  .lb-arrow-right { right: 0; border-radius: 3px 0 0 3px; }
 
   /* Thumbnail Strip */
-  .lightbox-thumb-strip {
-    background: #181C27;
-    border-top: 2px solid rgba(255, 212, 0, 0.25);
-    padding: 0.55rem 0.75rem;
+  .lb-thumbs {
     display: flex;
-    align-items: center;
-    gap: 0.4rem;
+    gap: 4px;
+    padding: 8px 10px;
+    background: #0D0F17;
+    border-top: 1px solid rgba(255,255,255,0.06);
     overflow-x: auto;
-    flex-shrink: 0;
     scrollbar-width: thin;
-    scrollbar-color: #FFD400 #181C27;
+    scrollbar-color: rgba(255,212,0,0.3) transparent;
   }
 
   .lb-thumb {
     flex-shrink: 0;
-    width: 62px;
-    height: 46px;
-    border: 2px solid #2E3450;
-    background: #0A0C12;
+    width: 48px;
+    height: 36px;
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 2px;
+    background: #090B12;
     cursor: pointer;
     overflow: hidden;
-    transition: all 0.12s ease;
     padding: 0;
+    transition: all 0.12s ease;
+    opacity: 0.55;
   }
-
   .lb-thumb img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: top center;
+    object-position: top;
     display: block;
   }
-
   .lb-thumb:hover {
-    border-color: #94A3B8;
-    transform: scale(1.06);
+    opacity: 0.85;
+    border-color: rgba(255, 212, 0, 0.5);
   }
-
   .lb-thumb.active {
+    opacity: 1;
     border-color: #FFD400;
-    box-shadow: 0 0 10px rgba(255, 212, 0, 0.35);
-    transform: scale(1.1);
+    box-shadow: 0 0 8px rgba(255, 212, 0, 0.3);
   }
 
-  @media (max-width: 600px) {
-    .lightbox-panel {
-      max-width: 100%;
-    }
-    .lb-image-area {
-      min-height: 260px;
-      max-height: 48vh;
-    }
-    .lb-thumb {
-      width: 50px;
-      height: 38px;
-    }
+  @media (max-width: 540px) {
+    .lightbox-panel { max-width: 100%; }
+    .lb-img-wrap    { height: 230px; }
+    .lb-thumb       { width: 38px; height: 28px; }
   }
 </style>
