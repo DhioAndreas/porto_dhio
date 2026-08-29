@@ -68,6 +68,14 @@ import SectionTile from "./SectionTile.astro";
           <span class="tag tag-yellow">VERIFIED</span>
         </div>
 
+        <!-- Profile Photo Frame -->
+        <div class="specs-photo-frame">
+          <img src="/images/pas_foto.jpg" alt="Foto Profil Dhio Andreas Gemilang" class="specs-photo-img" />
+          <div class="photo-meta-tag mono">
+            <span class="photo-dot">●</span> DHIO ANDREAS GEMILANG, S.Kom
+          </div>
+        </div>
+
         <div class="specs-table mono">
           <div class="spec-row">
             <span class="spec-label">NAMA LENGKAP</span>
@@ -215,6 +223,44 @@ import SectionTile from "./SectionTile.astro";
     padding-bottom: 0.75rem;
     border-bottom: 2px solid var(--ink);
     margin-bottom: 1rem;
+  }
+
+  .specs-photo-frame {
+    width: 100%;
+    height: 220px;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    margin-bottom: 1.25rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .specs-photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  .photo-meta-tag {
+    position: absolute;
+    bottom: 6px;
+    left: 6px;
+    right: 6px;
+    background: rgba(16, 16, 16, 0.9);
+    color: var(--signal-yellow);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--signal-yellow);
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .photo-dot {
+    color: var(--terminal-green);
   }
 
   .header-code {

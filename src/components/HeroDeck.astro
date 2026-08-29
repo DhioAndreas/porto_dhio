@@ -6,7 +6,7 @@
   <div class="deck-header">
     <div class="deck-id-badge">
       <div class="deck-avatar-box">
-        <span class="avatar-letter">D</span>
+        <img src="/images/pas_foto.jpg" alt="Dhio Andreas Gemilang" class="avatar-photo" />
         <span class="avatar-glow"></span>
       </div>
       <div class="deck-id-text">
@@ -272,18 +272,24 @@
   }
 
   .deck-avatar-box {
-    width: 38px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
     background: var(--signal-yellow);
     color: var(--ink);
     border: 2px solid #FFFFFF;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--font-display);
-    font-size: 1.25rem;
     position: relative;
     box-shadow: 2px 2px 0 rgba(255, 255, 255, 0.4);
+    overflow: hidden;
+  }
+
+  .avatar-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
   }
 
   .avatar-glow {

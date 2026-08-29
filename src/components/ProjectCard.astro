@@ -5,6 +5,7 @@ interface Props {
   description: string;
   category: string;
   featured?: boolean;
+  image?: string;
   tags: string[];
   highlights: string[];
   metrics?: string;
@@ -19,6 +20,7 @@ const {
   description,
   category,
   featured = false,
+  image,
   tags,
   highlights,
   metrics,
@@ -45,6 +47,18 @@ const {
       )
     }
   </div>
+
+  <!-- Project Visual Screenshot / Mockup Preview -->
+  {
+    image && (
+      <div class="project-media-box">
+        <img src={image} alt={`Screenshot ${title}`} class="project-media-img" loading="lazy" />
+        <div class="media-overlay-badge mono">
+          <span>● LIVE SCREENSHOT</span>
+        </div>
+      </div>
+    )
+  }
 
   <!-- Title & Subtitle -->
   <div class="project-heading-block">
@@ -153,6 +167,41 @@ const {
 
   .metrics-dot {
     color: var(--terminal-green);
+  }
+
+  .project-media-box {
+    position: relative;
+    width: 100%;
+    height: 190px;
+    background: #11141D;
+    border: 2px solid var(--ink);
+    margin-bottom: 1rem;
+    overflow: hidden;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .project-media-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 0.25s ease;
+  }
+
+  .project-card:hover .project-media-img {
+    transform: scale(1.04);
+  }
+
+  .media-overlay-badge {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(16, 16, 16, 0.85);
+    color: var(--signal-yellow);
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid var(--signal-yellow);
   }
 
   .project-heading-block {
