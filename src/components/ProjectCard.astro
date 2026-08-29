@@ -1,4 +1,9 @@
 ---
+interface GalleryItem {
+  src: string;
+  caption: string;
+}
+
 interface Props {
   title: string;
   subtitle: string;
@@ -6,6 +11,7 @@ interface Props {
   category: string;
   featured?: boolean;
   image?: string;
+  gallery?: GalleryItem[];
   tags: string[];
   highlights: string[];
   metrics?: string;
@@ -21,6 +27,7 @@ const {
   category,
   featured = false,
   image,
+  gallery = [],
   tags,
   highlights,
   metrics,
@@ -28,9 +35,12 @@ const {
   demo,
   index,
 } = Astro.props;
+
+const hasGallery = gallery && gallery.length > 0;
+const cardId = `proj-card-${index}`;
 ---
 
-<div class={`project-card brutal-card ${featured ? 'project-featured' : ''}`}>
+<div class={`project-card brutal-card ${featured ? 'project-featured' : ''}`} id={cardId}>
   <!-- Top Meta Strip -->
   <div class="project-header">
     <div class="project-meta-left">
@@ -48,16 +58,60 @@ const {
     }
   </div>
 
-  <!-- Project Visual Screenshot / Mockup Preview -->
+  <!-- MULTI-IMAGE GALLERY PAGINATION (Jika memiliki galeri gambar) -->
   {
-    image && (
+    hasGallery ? (
+      <div class="gallery-slider-box" data-gallery-id={cardId}>
+        <!-- Top Slider Header & Counter -->
+        <div class="gallery-topbar">
+          <div class="gallery-counter mono">
+            <span class="pulse-green">●</span>
+            <span class="active-slide-num">1</span> / <span class="total-slides">{gallery.length} LAYAR</span>
+          </div>
+          <div class="gallery-nav-btns">
+            <button class="slider-btn prev-btn" aria-label="Slide sebelumnya" title="Sebelumnya">
+              <span>◀ PREV</span>
+            </button>
+            <button class="slider-btn next-btn" aria-label="Slide berikutnya" title="Berikutnya">
+              <span>NEXT ▶</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Image Stage Area -->
+        <div class="gallery-stage">
+          {gallery.map((item, gIdx) => (
+            <div class={`slide-frame ${gIdx === 0 ? 'active' : ''}`} data-slide-index={gIdx}>
+              <img src={item.src} alt={item.caption} class="slide-img" loading="lazy" />
+              <div class="slide-caption-bar mono">
+                <span class="caption-tag">[{gIdx + 1}/{gallery.length}]</span>
+                <span class="caption-text">{item.caption}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Pagination Number Jump Pills -->
+        <div class="gallery-pagination-strip">
+          <span class="mono pag-label">LAYAR:</span>
+          <div class="pag-pills">
+            {gallery.map((_, pIdx) => (
+              <button class={`pag-pill mono ${pIdx === 0 ? 'active' : ''}`} data-target-slide={pIdx}>
+                {pIdx + 1}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    ) : image ? (
+      /* Single Image Preview */
       <div class="project-media-box">
         <img src={image} alt={`Screenshot ${title}`} class="project-media-img" loading="lazy" />
         <div class="media-overlay-badge mono">
           <span>● LIVE SCREENSHOT</span>
         </div>
       </div>
-    )
+    ) : null
   }
 
   <!-- Title & Subtitle -->
@@ -110,6 +164,75 @@ const {
     </a>
   </div>
 </div>
+
+<script>
+  // Dynamic Slider & Pagination Logic for all project cards with gallery
+  function initGallerySliders() {
+    const sliders = document.querySelectorAll('.gallery-slider-box');
+
+    sliders.forEach((slider) => {
+      const slides = slider.querySelectorAll('.slide-frame');
+      const pills = slider.querySelectorAll('.pag-pill');
+      const counterEl = slider.querySelector('.active-slide-num');
+      const prevBtn = slider.querySelector('.prev-btn');
+      const nextBtn = slider.querySelector('.next-btn');
+
+      let currentIdx = 0;
+      const total = slides.length;
+
+      function updateSlide(idx: number) {
+        if (idx < 0) idx = total - 1;
+        if (idx >= total) idx = 0;
+        currentIdx = idx;
+
+        slides.forEach((slide, sIdx) => {
+          if (sIdx === currentIdx) {
+            slide.classList.add('active');
+          } else {
+            slide.classList.remove('active');
+          }
+        });
+
+        pills.forEach((pill, pIdx) => {
+          if (pIdx === currentIdx) {
+            pill.classList.add('active');
+          } else {
+            pill.classList.remove('active');
+          }
+        });
+
+        if (counterEl) {
+          counterEl.textContent = String(currentIdx + 1);
+        }
+      }
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          updateSlide(currentIdx - 1);
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          updateSlide(currentIdx + 1);
+        });
+      }
+
+      pills.forEach((pill) => {
+        pill.addEventListener('click', () => {
+          const target = Number(pill.getAttribute('data-target-slide'));
+          if (!isNaN(target)) {
+            updateSlide(target);
+          }
+        });
+      });
+    });
+  }
+
+  // Initialize on load and page swaps
+  initGallerySliders();
+  document.addEventListener('astro:page-load', initGallerySliders);
+</script>
 
 <style>
   .project-card {
@@ -169,10 +292,196 @@ const {
     color: var(--terminal-green);
   }
 
+  /* GALLERY PAGINATION / SLIDER CONTAINER */
+  .gallery-slider-box {
+    background: #0F1219;
+    border: 2px solid var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .gallery-topbar {
+    background: #181C27;
+    border-bottom: 2px solid var(--ink);
+    padding: 0.45rem 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .gallery-counter {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--signal-yellow);
+  }
+
+  .pulse-green {
+    color: var(--terminal-green);
+    animation: pulse 1.5s infinite;
+  }
+
+  .total-slides {
+    color: #94A3B8;
+  }
+
+  .gallery-nav-btns {
+    display: flex;
+    gap: 0.35rem;
+  }
+
+  .slider-btn {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: var(--paper-card);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    padding: 0.2rem 0.55rem;
+    cursor: pointer;
+    box-shadow: 2px 2px 0 var(--ink);
+    transition: all 0.1s ease;
+  }
+
+  .slider-btn:hover {
+    background: var(--signal-yellow);
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+
+  .slider-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0 0 0 var(--ink);
+  }
+
+  .gallery-stage {
+    position: relative;
+    width: 100%;
+    height: 240px;
+    background: #0B0D13;
+    overflow: hidden;
+  }
+
+  .slide-frame {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .slide-frame.active {
+    display: flex;
+    animation: fadeInSlide 0.2s ease;
+  }
+
+  @keyframes fadeInSlide {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .slide-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    background: #0A0C12;
+  }
+
+  .slide-caption-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(16, 18, 27, 0.92);
+    border-top: 1px solid rgba(255, 212, 0, 0.4);
+    padding: 0.35rem 0.65rem;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.72rem;
+    color: #F1F5F9;
+  }
+
+  .caption-tag {
+    color: var(--signal-yellow);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .caption-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .gallery-pagination-strip {
+    background: #181C27;
+    border-top: 2px solid var(--ink);
+    padding: 0.4rem 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    overflow-x: auto;
+  }
+
+  .pag-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #8E98B0;
+    flex-shrink: 0;
+  }
+
+  .pag-pills {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .pag-pill {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.68rem;
+    font-weight: 700;
+    background: #242938;
+    color: #C5CBD8;
+    border: 1px solid #3E465E;
+    cursor: pointer;
+    transition: all 0.1s ease;
+  }
+
+  .pag-pill:hover {
+    background: var(--circuit-blue);
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+  }
+
+  .pag-pill.active {
+    background: var(--signal-yellow);
+    color: var(--ink);
+    font-weight: 900;
+    border-color: var(--ink);
+    box-shadow: 1px 1px 0 var(--ink);
+    transform: scale(1.1);
+  }
+
+  /* Single Image Preview Box */
   .project-media-box {
     position: relative;
     width: 100%;
-    height: 190px;
+    height: 200px;
     background: #11141D;
     border: 2px solid var(--ink);
     margin-bottom: 1rem;
