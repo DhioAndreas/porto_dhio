@@ -1,0 +1,128 @@
+---
+interface Props {
+  id: string;
+  code: string;
+  title: string;
+  subtitle?: string;
+  accent?: "yellow" | "blue" | "red" | "green" | "dark";
+  class?: string;
+}
+
+const {
+  id,
+  code,
+  title,
+  subtitle,
+  accent = "yellow",
+  class: className = "",
+} = Astro.props;
+---
+
+<section id={id} class={`section-tile-block ${className}`}>
+  <div class="container">
+    <!-- Header Tile -->
+    <div class="tile-header-wrapper">
+      <div class="tile-header-left">
+        <div class={`tile-code-badge badge-${accent}`}>
+          <span class="mono">{code}</span>
+        </div>
+        <h2 class="tile-main-title">{title}</h2>
+      </div>
+      {subtitle && <p class="tile-subtitle">{subtitle}</p>}
+    </div>
+
+    <!-- Tile Content Slot -->
+    <div class="tile-body-slot">
+      <slot />
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-tile-block {
+    padding: 3.5rem 0;
+    position: relative;
+  }
+
+  .tile-header-wrapper {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid var(--ink);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .tile-header-wrapper {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+  }
+
+  .tile-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .tile-code-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border: 2px solid var(--ink);
+    width: fit-content;
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .badge-yellow {
+    background-color: var(--signal-yellow);
+    color: var(--ink);
+  }
+
+  .badge-blue {
+    background-color: var(--circuit-blue);
+    color: #FFFFFF;
+  }
+
+  .badge-red {
+    background-color: var(--alert-red);
+    color: #FFFFFF;
+  }
+
+  .badge-green {
+    background-color: var(--terminal-green);
+    color: var(--ink);
+  }
+
+  .badge-dark {
+    background-color: var(--ink);
+    color: #FFFFFF;
+  }
+
+  .tile-main-title {
+    font-size: 2.2rem;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
+  @media (min-width: 768px) {
+    .tile-main-title {
+      font-size: 2.8rem;
+    }
+  }
+
+  .tile-subtitle {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #4A4A52;
+    max-width: 550px;
+  }
+
+  .tile-body-slot {
+    position: relative;
+  }
+</style>

@@ -1,0 +1,356 @@
+---
+import SectionTile from "./SectionTile.astro";
+---
+
+<SectionTile
+  id="contact"
+  code="SEC-05 // DISPATCH_GATEWAY"
+  title="HUBUNGI SAYA"
+  subtitle="Terbuka untuk kesempatan kerja Full-Stack Developer, kolaborasi rekayasa sistem, atau proyek digital."
+  accent="red"
+>
+  <div class="contact-grid">
+    <!-- Left: Direct Contact Information Cards -->
+    <div class="contact-info-col">
+      <div class="brutal-card contact-main-card">
+        <div class="contact-card-top">
+          <span class="mono tag tag-green">● READY TO COMMUNICATE</span>
+          <span class="mono response-sla">SLA: &lt; 24 JAM</span>
+        </div>
+
+        <h3 class="contact-card-title">Mari Bangun Solusi Bersama</h3>
+        <p class="contact-card-desc">
+          Apakah Anda memiliki lowongan kerja, proyek pengembangan web & mobile, kebutuhan pelabelan data AI, atau konsultasi sistem? Jangan ragu untuk menghubungi saya melalui kontak di bawah:
+        </p>
+
+        <div class="contact-channels-list">
+          <!-- Channel: Email -->
+          <div class="channel-item">
+            <div class="channel-icon-box icon-yellow">✉</div>
+            <div class="channel-details">
+              <span class="channel-type mono">DIRECT EMAIL</span>
+              <a href="mailto:dhioandreas50@gmail.com" class="channel-link">dhioandreas50@gmail.com</a>
+            </div>
+            <button class="btn btn-sm copy-btn" data-copy="dhioandreas50@gmail.com" title="Salin Email">
+              <span>Salin</span>
+            </button>
+          </div>
+
+          <!-- Channel: WhatsApp -->
+          <div class="channel-item">
+            <div class="channel-icon-box icon-green">📱</div>
+            <div class="channel-details">
+              <span class="channel-type mono">WHATSAPP / TELEPON</span>
+              <a href="https://wa.me/6282115107236" target="_blank" rel="noopener noreferrer" class="channel-link">+62 821-1510-7236</a>
+            </div>
+            <a href="https://wa.me/6282115107236" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary">
+              <span>Chat WA ↗</span>
+            </a>
+          </div>
+
+          <!-- Channel: Location -->
+          <div class="channel-item">
+            <div class="channel-icon-box icon-blue">📍</div>
+            <div class="channel-details">
+              <span class="channel-type mono">DOMISILI / BASE</span>
+              <span class="channel-static">Klender, Jakarta Timur, DKI Jakarta (13470)</span>
+            </div>
+            <span class="tag tag-yellow">SIM C AKTIF</span>
+          </div>
+        </div>
+
+        <!-- Social / Developer Presence -->
+        <div class="dev-presence-strip">
+          <span class="presence-label mono">PROFIL PLATFORM:</span>
+          <div class="presence-links">
+            <a href="https://github.com/dhioandreas" target="_blank" rel="noopener noreferrer" class="btn btn-sm">
+              <span>GitHub ↗</span>
+            </a>
+            <a href="https://linkedin.com/in/dhioandreas" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-blue">
+              <span>LinkedIn ↗</span>
+            </a>
+            <a href="mailto:dhioandreas50@gmail.com?subject=Inquiry%20Portofolio%20Dhio%20Andreas" class="btn btn-sm btn-red">
+              <span>Kirim Email Langsung ⚡</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Quick Direct Dispatch Form -->
+    <div class="contact-form-col">
+      <div class="brutal-card contact-form-card">
+        <div class="form-header">
+          <span class="mono header-sub">&gt; DISPATCH_MESSAGE_FORM</span>
+          <span class="mono header-sub">ENCRYPTED // TLS</span>
+        </div>
+
+        <form id="contact-form" class="brutal-form" action="mailto:dhioandreas50@gmail.com" method="GET" enctype="text/plain">
+          <div class="form-group">
+            <label for="contact-name" class="form-label mono">01. NAMA LENGKAP / PERUSAHAAN *</label>
+            <input type="text" id="contact-name" name="name" class="brutal-input" placeholder="contoh: Budi Santoso / PT Maju Teknologi" required />
+          </div>
+
+          <div class="form-group">
+            <label for="contact-email" class="form-label mono">02. EMAIL PENGIRIM *</label>
+            <input type="email" id="contact-email" name="email" class="brutal-input" placeholder="contoh: budi@company.id" required />
+          </div>
+
+          <div class="form-group">
+            <label for="contact-subject" class="form-label mono">03. TOPIK / PERIHAL *</label>
+            <input type="text" id="contact-subject" name="subject" class="brutal-input" placeholder="contoh: Tawaran Full-Stack Developer / Proyek Web" required />
+          </div>
+
+          <div class="form-group">
+            <label for="contact-message" class="form-label mono">04. DETAIL PESAN *</label>
+            <textarea id="contact-message" name="body" rows="4" class="brutal-textarea" placeholder="Tuliskan deskripsi ringkas kebutuhan atau tawaran Anda di sini..." required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary form-submit-btn" style="width: 100%;">
+            <span>Kirim Pesan Sekarang 🚀</span>
+          </button>
+          
+          <div id="copy-toast" class="copy-toast mono"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</SectionTile>
+
+<script>
+  // Copy to clipboard functionality
+  const copyButtons = document.querySelectorAll('.copy-btn');
+  const toast = document.getElementById('copy-toast');
+
+  copyButtons.forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const textToCopy = btn.getAttribute('data-copy');
+      if (textToCopy) {
+        try {
+          await navigator.clipboard.writeText(textToCopy);
+          if (toast) {
+            toast.textContent = `✓ Disalin ke clipboard: ${textToCopy}`;
+            toast.classList.add('show');
+            setTimeout(() => {
+              toast.classList.remove('show');
+            }, 3000);
+          }
+        } catch (err) {
+          console.error("Gagal menyalin text: ", err);
+        }
+      }
+    });
+  });
+</script>
+
+<style>
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  @media (min-width: 960px) {
+    .contact-grid {
+      grid-template-columns: 1.15fr 0.85fr;
+    }
+  }
+
+  .contact-main-card {
+    background: #FFFFFF;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .contact-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 1rem;
+  }
+
+  .response-sla {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #555555;
+  }
+
+  .contact-card-title {
+    font-size: 1.5rem;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+
+  .contact-card-desc {
+    font-size: 0.95rem;
+    color: #333333;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .contact-channels-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .channel-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    background: #F8F8FA;
+    border: 2px solid var(--ink);
+    padding: 0.75rem;
+    box-shadow: 2px 2px 0 var(--ink);
+    flex-wrap: wrap;
+  }
+
+  .channel-icon-box {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    border: 1px solid var(--ink);
+    flex-shrink: 0;
+  }
+
+  .icon-yellow { background: var(--signal-yellow); }
+  .icon-green { background: var(--terminal-green); }
+  .icon-blue { background: var(--circuit-blue); color: #FFFFFF; }
+
+  .channel-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex-grow: 1;
+  }
+
+  .channel-type {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #666666;
+  }
+
+  .channel-link {
+    font-family: var(--font-subhead);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink);
+    word-break: break-all;
+  }
+
+  .channel-link:hover {
+    color: var(--circuit-blue);
+    text-decoration: underline;
+  }
+
+  .channel-static {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .dev-presence-strip {
+    margin-top: auto;
+    padding-top: 1.25rem;
+    border-top: 2px dashed rgba(16, 16, 16, 0.2);
+  }
+
+  .presence-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #666666;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .presence-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* Form Card */
+  .contact-form-card {
+    background: #FFFFFF;
+  }
+
+  .form-header {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 1.25rem;
+  }
+
+  .header-sub {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #444444;
+  }
+
+  .brutal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .form-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .brutal-input,
+  .brutal-textarea {
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    padding: 0.65rem 0.75rem;
+    background: #FAFAFB;
+    border: 2px solid var(--ink);
+    color: var(--ink);
+    transition: background-color 0.15s ease;
+  }
+
+  .brutal-input:focus,
+  .brutal-textarea:focus {
+    background: #FFFFFF;
+    outline: 2px solid var(--circuit-blue);
+  }
+
+  .form-submit-btn {
+    margin-top: 0.5rem;
+  }
+
+  .copy-toast {
+    display: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+    background: var(--signal-yellow);
+    border: 2px solid var(--ink);
+    padding: 0.5rem;
+    text-align: center;
+    color: var(--ink);
+    margin-top: 0.5rem;
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .copy-toast.show {
+    display: block;
+    animation: fadeIn 0.2s ease;
+  }
+</style>

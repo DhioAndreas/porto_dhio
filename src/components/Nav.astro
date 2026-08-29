@@ -1,0 +1,211 @@
+---
+---
+
+<header class="site-header">
+  <div class="container header-container">
+    <a href="#" class="brand-badge" aria-label="Dhio Andreas Gemilang Home">
+      <span class="brand-initials">DAG</span>
+      <span class="brand-divider">/</span>
+      <span class="brand-title">DHIO.ANDREAS</span>
+      <span class="brand-tag hide-sm">DEV_v2.5</span>
+    </a>
+
+    <!-- Desktop Navigation Links -->
+    <nav class="nav-desktop" aria-label="Main Navigation">
+      <a href="#about" class="nav-link">About</a>
+      <a href="#skills" class="nav-link">Skills</a>
+      <a href="#experience" class="nav-link">Experience</a>
+      <a href="#projects" class="nav-link">Projects</a>
+      <a href="#leadership" class="nav-link">Leadership</a>
+      <a href="#certifications" class="nav-link">Certs</a>
+      <a href="#contact" class="btn btn-sm btn-primary">Contact 📨</a>
+    </nav>
+
+    <!-- Mobile Hamburger Toggle -->
+    <button id="mobile-menu-btn" class="mobile-toggle btn btn-sm" aria-label="Toggle navigation menu" aria-expanded="false">
+      <span class="menu-icon">☰</span>
+    </button>
+  </div>
+
+  <!-- Mobile Dropdown Menu -->
+  <div id="mobile-nav-panel" class="mobile-nav-panel">
+    <div class="container mobile-links">
+      <a href="#about" class="mobile-link">01. About</a>
+      <a href="#skills" class="mobile-link">02. Skills Matrix</a>
+      <a href="#experience" class="mobile-link">03. Experience</a>
+      <a href="#projects" class="mobile-link">04. Projects</a>
+      <a href="#leadership" class="mobile-link">05. Leadership & Volunteer</a>
+      <a href="#education" class="mobile-link">06. Education</a>
+      <a href="#certifications" class="mobile-link">07. Certifications</a>
+      <a href="#contact" class="btn btn-primary" style="margin-top: 1rem; width: 100%;">Hubungi Saya 📨</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const toggleBtn = document.getElementById('mobile-menu-btn');
+  const navPanel = document.getElementById('mobile-nav-panel');
+  const links = document.querySelectorAll('.mobile-link');
+
+  if (toggleBtn && navPanel) {
+    toggleBtn.addEventListener('click', () => {
+      const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+      toggleBtn.setAttribute('aria-expanded', String(!isExpanded));
+      navPanel.classList.toggle('is-open');
+      toggleBtn.innerHTML = isExpanded ? '<span class="menu-icon">☰</span>' : '<span class="menu-icon">✕</span>';
+    });
+
+    links.forEach(link => {
+      link.addEventListener('click', () => {
+        navPanel.classList.remove('is-open');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        toggleBtn.innerHTML = '<span class="menu-icon">☰</span>';
+      });
+    });
+  }
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--paper-card);
+    border-bottom: var(--border-thick);
+    box-shadow: 0 4px 0 var(--ink);
+  }
+
+  .header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .brand-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    background: var(--ink);
+    color: #FFFFFF;
+    padding: 0.4rem 0.75rem;
+    border: 2px solid var(--ink);
+    box-shadow: 3px 3px 0 var(--signal-yellow);
+    transition: transform 0.1s ease;
+  }
+
+  .brand-badge:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--signal-yellow);
+  }
+
+  .brand-initials {
+    color: var(--signal-yellow);
+  }
+
+  .brand-divider {
+    color: #888888;
+  }
+
+  .brand-tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    background: var(--circuit-blue);
+    color: #FFFFFF;
+    padding: 0.15rem 0.4rem;
+    margin-left: 0.25rem;
+  }
+
+  .nav-desktop {
+    display: none;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .nav-link {
+    font-family: var(--font-subhead);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    color: var(--ink);
+    position: relative;
+    padding: 0.25rem 0;
+    transition: color 0.15s ease;
+  }
+
+  .nav-link:hover {
+    color: var(--circuit-blue);
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background-color: var(--signal-yellow);
+    transition: width 0.2s ease;
+  }
+
+  .nav-link:hover::after {
+    width: 100%;
+  }
+
+  .mobile-toggle {
+    display: flex;
+    font-size: 1.25rem;
+    padding: 0.35rem 0.75rem;
+  }
+
+  .mobile-nav-panel {
+    display: none;
+    background-color: var(--paper-card);
+    border-top: var(--border-thick);
+    border-bottom: var(--border-thick);
+    padding: 1.5rem 0;
+    box-shadow: var(--shadow-hard);
+  }
+
+  .mobile-nav-panel.is-open {
+    display: block;
+  }
+
+  .mobile-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .mobile-link {
+    font-family: var(--font-subhead);
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed rgba(16, 16, 16, 0.2);
+  }
+
+  .mobile-link:hover {
+    color: var(--circuit-blue);
+    padding-left: 0.5rem;
+  }
+
+  @media (min-width: 900px) {
+    .nav-desktop {
+      display: flex;
+    }
+    .mobile-toggle {
+      display: none;
+    }
+  }
+
+  @media (max-width: 500px) {
+    .hide-sm {
+      display: none;
+    }
+  }
+</style>

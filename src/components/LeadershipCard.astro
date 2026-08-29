@@ -1,0 +1,135 @@
+---
+interface Props {
+  role: string;
+  org: string;
+  period: string;
+  category: string;
+  bullets: string[];
+  index: number;
+}
+
+const {
+  role,
+  org,
+  period,
+  category,
+  bullets,
+  index,
+} = Astro.props;
+---
+
+<div class="leadership-card brutal-card">
+  <div class="lead-header">
+    <div class="lead-meta-left">
+      <span class="lead-idx mono">LEAD_0{index + 1}</span>
+      <span class="tag tag-yellow">{category}</span>
+    </div>
+    <span class="lead-period mono">📅 {period}</span>
+  </div>
+
+  <div class="lead-titles">
+    <h3 class="lead-role">{role}</h3>
+    <h4 class="lead-org">{org}</h4>
+  </div>
+
+  <ul class="lead-bullets">
+    {
+      bullets.map((b) => (
+        <li>
+          <span class="bullet-caret">❯</span>
+          <span>{b}</span>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .leadership-card {
+    background: #FFFFFF;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-left: 6px solid var(--signal-yellow);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .leadership-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-hard-lg);
+  }
+
+  .lead-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px dashed rgba(16, 16, 16, 0.2);
+    margin-bottom: 0.85rem;
+  }
+
+  .lead-meta-left {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .lead-idx {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #666666;
+  }
+
+  .lead-period {
+    font-size: 0.78rem;
+    font-weight: 700;
+    background: var(--paper);
+    padding: 0.15rem 0.45rem;
+    border: 1px solid var(--ink);
+    color: var(--ink);
+  }
+
+  .lead-titles {
+    margin-bottom: 0.85rem;
+  }
+
+  .lead-role {
+    font-size: 1.25rem;
+    color: var(--ink);
+    margin-bottom: 0.2rem;
+  }
+
+  .lead-org {
+    font-family: var(--font-subhead);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #444444;
+  }
+
+  .lead-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: auto;
+  }
+
+  .lead-bullets li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    font-size: 0.9rem;
+    color: #2D3139;
+    line-height: 1.5;
+  }
+
+  .bullet-caret {
+    color: var(--circuit-blue);
+    font-weight: 900;
+    font-size: 0.8rem;
+    margin-top: 0.15rem;
+    flex-shrink: 0;
+  }
+</style>

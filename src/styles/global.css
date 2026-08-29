@@ -1,0 +1,313 @@
+/* ==========================================================================
+   NEUBRUTALISM × SIGNAL GRID DESIGN SYSTEM
+   Dhio Andreas Gemilang — Portfolio
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:root {
+  /* Core Palette */
+  --paper: #EDEDF0;
+  --paper-card: #FFFFFF;
+  --ink: #101010;
+  --signal-yellow: #FFD400;
+  --signal-yellow-light: #FFF8D6;
+  --circuit-blue: #1E40FF;
+  --circuit-blue-light: #EBF0FF;
+  --alert-red: #FF3D2E;
+  --alert-red-light: #FFEBE9;
+  --terminal-green: #00C853;
+  --terminal-green-light: #E6F9EE;
+  --terminal-bg: #0F1117;
+  --terminal-border: #2A2E3D;
+
+  /* Typography */
+  --font-display: 'Archivo Black', -apple-system, sans-serif;
+  --font-subhead: 'Space Grotesk', -apple-system, sans-serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Borders & Shadows */
+  --border-thick: 3px solid var(--ink);
+  --border-ultra: 4px solid var(--ink);
+  --border-medium: 2px solid var(--ink);
+  --border-dashed: 2px dashed var(--ink);
+  
+  --shadow-hard: 6px 6px 0px var(--ink);
+  --shadow-hard-sm: 4px 4px 0px var(--ink);
+  --shadow-hard-lg: 8px 8px 0px var(--ink);
+  --shadow-pressed: 2px 2px 0px var(--ink);
+  --shadow-blue: 6px 6px 0px var(--circuit-blue);
+  --shadow-yellow: 6px 6px 0px var(--signal-yellow);
+
+  /* Spacing & Layout */
+  --container-max: 1200px;
+  --radius-none: 0px;
+}
+
+/* CSS Reset & Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.6;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--paper);
+  background-image: 
+    radial-gradient(var(--ink) 1px, transparent 1px),
+    linear-gradient(to right, rgba(16, 16, 16, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(16, 16, 16, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px, 48px 48px, 48px 48px;
+  background-position: 0 0, 0 0, 0 0;
+  overflow-x: hidden;
+}
+
+/* Selection */
+::selection {
+  background: var(--signal-yellow);
+  color: var(--ink);
+}
+
+/* Accessibility Focus */
+:focus-visible {
+  outline: 3px dashed var(--circuit-blue) !important;
+  outline-offset: 3px !important;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--ink);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+p, li, span {
+  font-family: var(--font-body);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+code, pre, .mono {
+  font-family: var(--font-mono);
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Neubrutalist Base Components */
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-subhead);
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  padding: 0.75rem 1.5rem;
+  background: var(--paper-card);
+  color: var(--ink);
+  border: var(--border-thick);
+  box-shadow: var(--shadow-hard);
+  cursor: pointer;
+  transition: transform 0.1s cubic-bezier(0, 0, 0.2, 1), box-shadow 0.1s cubic-bezier(0, 0, 0.2, 1), background-color 0.15s ease;
+  user-select: none;
+  text-decoration: none;
+}
+
+.btn:hover {
+  transform: translate(2px, 2px);
+  box-shadow: var(--shadow-pressed);
+}
+
+.btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 var(--ink);
+}
+
+.btn-primary {
+  background: var(--signal-yellow);
+  color: var(--ink);
+}
+.btn-primary:hover {
+  background: #FFE033;
+}
+
+.btn-blue {
+  background: var(--circuit-blue);
+  color: #FFFFFF;
+}
+.btn-blue:hover {
+  background: #3B5AFF;
+}
+
+.btn-red {
+  background: var(--alert-red);
+  color: #FFFFFF;
+}
+.btn-red:hover {
+  background: #FF5A4D;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.85rem;
+  font-size: 0.85rem;
+  box-shadow: var(--shadow-hard-sm);
+}
+.btn-sm:hover {
+  transform: translate(2px, 2px);
+  box-shadow: var(--shadow-pressed);
+}
+
+/* Card Tiles */
+.brutal-card {
+  background: var(--paper-card);
+  border: var(--border-thick);
+  box-shadow: var(--shadow-hard);
+  padding: 1.5rem;
+  position: relative;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.brutal-card-hover:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: var(--shadow-hard-lg);
+}
+
+/* Section Header Tile */
+.section-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--ink);
+  color: var(--signal-yellow);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.35rem 0.75rem;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.section-title {
+  font-size: 2.25rem;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+  .section-title {
+    font-size: 3rem;
+  }
+}
+
+.section-desc {
+  font-size: 1.1rem;
+  color: #333333;
+  max-width: 650px;
+  font-weight: 500;
+}
+
+/* Tags & Badges */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border: 2px solid var(--ink);
+  background: #FFFFFF;
+  color: var(--ink);
+  box-shadow: 2px 2px 0px var(--ink);
+  text-transform: uppercase;
+}
+
+.tag-yellow {
+  background: var(--signal-yellow);
+}
+
+.tag-blue {
+  background: var(--circuit-blue);
+  color: #FFFFFF;
+}
+
+.tag-red {
+  background: var(--alert-red);
+  color: #FFFFFF;
+}
+
+.tag-green {
+  background: var(--terminal-green);
+  color: #101010;
+}
+
+.tag-dark {
+  background: var(--ink);
+  color: #FFFFFF;
+}
+
+/* Caution Bar / Hazard Stripes */
+.hazard-stripe {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--signal-yellow),
+    var(--signal-yellow) 12px,
+    var(--ink) 12px,
+    var(--ink) 24px
+  );
+  height: 12px;
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

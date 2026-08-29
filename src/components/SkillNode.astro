@@ -1,0 +1,342 @@
+---
+import SectionTile from "./SectionTile.astro";
+
+const skillCategories = [
+  {
+    id: "prog",
+    nodeCode: "NODE-01 // LAYER-7_APP",
+    title: "Programming & Web Development",
+    accent: "yellow",
+    badge: "Core Stack",
+    skills: [
+      { name: "Python", level: "Advanced", desc: "Data processing, script automation & ML" },
+      { name: "PHP", level: "Advanced", desc: "Backend architecture & Laravel framework" },
+      { name: "JavaScript", level: "Advanced", desc: "ES6+, DOM, React.js & Web APIs" },
+      { name: "React.js", level: "Advanced", desc: "Component UI, hooks & state management" },
+      { name: "Laravel", level: "Advanced", desc: "MVC, Eloquent ORM, Blade & REST APIs" },
+      { name: "Java", level: "Intermediate", desc: "OOP, data structures & algorithms" },
+      { name: "HTML5", level: "Expert", desc: "Semantic markup & accessibility standards" },
+      { name: "CSS3", level: "Advanced", desc: "Responsive layout, Grid/Flexbox & Neubrutalism" },
+    ],
+  },
+  {
+    id: "mobile",
+    nodeCode: "NODE-02 // CLIENT_MOBILE",
+    title: "Mobile Development",
+    accent: "blue",
+    badge: "Cross-Platform",
+    skills: [
+      { name: "Flutter", level: "Intermediate", desc: "Cross-platform mobile UI development" },
+      { name: "Dart", level: "Intermediate", desc: "Strong-typed reactive client logic" },
+      { name: "Android Studio", level: "Intermediate", desc: "Gradle build, emulator & SDK debugging" },
+    ],
+  },
+  {
+    id: "data",
+    nodeCode: "NODE-03 // INTELLIGENCE_DATA",
+    title: "Data, AI & Machine Learning",
+    accent: "green",
+    badge: "Data / ML",
+    skills: [
+      { name: "MySQL", level: "Advanced", desc: "Relational database schema & indexing" },
+      { name: "TensorFlow", level: "Intermediate", desc: "Deep learning models & classifier pipelines" },
+      { name: "Keras", level: "Intermediate", desc: "Neural network architecture & validation" },
+      { name: "Jupyter Notebook", level: "Advanced", desc: "Exploratory data analysis & prototyping" },
+      { name: "Data Annotation", level: "Expert", desc: "Multimodal dataset QA & labeling at KUPU ID" },
+      { name: "Data Analysis", level: "Advanced", desc: "Statistical validation & QA reporting" },
+    ],
+  },
+  {
+    id: "network",
+    nodeCode: "NODE-04 // CISCO_INFRASTRUCTURE",
+    title: "Networking & System Administration",
+    accent: "blue",
+    badge: "Cisco Certified",
+    skills: [
+      { name: "Cisco CCNAv7", level: "Certified", desc: "OSI model, IPv4/IPv6, VLANs, switching & routing" },
+      { name: "IT Essentials", level: "Certified", desc: "Hardware diagnostics, OS & hardware troubleshooting" },
+      { name: "TCP/IP & Subnetting", level: "Advanced", desc: "CIDR calculation, packet flow & gateway configs" },
+      { name: "Packet Tracer", level: "Advanced", desc: "LAN/WAN simulation & network topology design" },
+    ],
+  },
+  {
+    id: "tools",
+    nodeCode: "NODE-05 // DEVOPS_TOOLING",
+    title: "Tools & Platforms",
+    accent: "yellow",
+    badge: "Productivity",
+    skills: [
+      { name: "VS Code", level: "Daily Driver", desc: "Extensions, workspace configs & debugging" },
+      { name: "Postman", level: "Advanced", desc: "RESTful API testing, environments & mock servers" },
+      { name: "XAMPP", level: "Advanced", desc: "Local Apache, MySQL & PHP server environment" },
+      { name: "Google Cloud", level: "Basic", desc: "Cloud compute, storage & basic deployment" },
+      { name: "cPanel", level: "Advanced", desc: "DNS management, SSL configs, FTP & MySQL remote" },
+      { name: "Git / GitHub", level: "Advanced", desc: "Version control, branching & pull requests" },
+    ],
+  },
+  {
+    id: "soft",
+    nodeCode: "NODE-06 // MANAGEMENT_CIVIC",
+    title: "Leadership & Professional Soft Skills",
+    accent: "red",
+    badge: "Leadership",
+    skills: [
+      { name: "Team Leadership", level: "Proven", desc: "Ketua Umum SGI & koordinator tim pemuda" },
+      { name: "Cross-functional Comm.", level: "Active", desc: "Humas SJTB & Sekretaris RT 005 Klender" },
+      { name: "Time Management", level: "Proven", desc: "Memenuhi target SLA throughput & akurasi KUPU ID" },
+      { name: "Problem Solving", level: "High", desc: "Troubleshooting bug software & jaringan komputer" },
+      { name: "Adaptability", level: "High", desc: "Cepat menguasai stack teknologi baru & panduan AI" },
+    ],
+  },
+];
+---
+
+<SectionTile
+  id="skills"
+  code="SEC-02 // SKILL_TOPOLOGY"
+  title="SKILLS & NODE MATRIX"
+  subtitle="Pemetaan komprehensif keahlian teknis, rekayasa data, infrastruktur jaringan Cisco, dan kapabilitas kepemimpinan."
+  accent="blue"
+>
+  <!-- Topology Info Banner -->
+  <div class="topology-banner mono">
+    <div class="banner-left">
+      <span class="pulse-icon">●</span>
+      <span>TOPOLOGY_STATUS: ALL NODES ONLINE // 6 CLUSTERS ACTIVE</span>
+    </div>
+    <div class="banner-right hide-mobile">
+      <span>PROTOCOL: IEEE 802.3 / FULL-STACK READY</span>
+    </div>
+  </div>
+
+  <!-- Category Filter Controls -->
+  <div class="skill-filters" id="skill-filter-bar">
+    <button class="filter-btn active" data-target="all">ALL NODES</button>
+    <button class="filter-btn" data-target="prog">WEB & DEV</button>
+    <button class="filter-btn" data-target="mobile">MOBILE</button>
+    <button class="filter-btn" data-target="data">DATA & ML</button>
+    <button class="filter-btn" data-target="network">CISCO / NET</button>
+    <button class="filter-btn" data-target="tools">TOOLS</button>
+    <button class="filter-btn" data-target="soft">LEADERSHIP</button>
+  </div>
+
+  <!-- Nodes Grid -->
+  <div class="nodes-grid" id="nodes-grid-container">
+    {
+      skillCategories.map((cat) => (
+        <div class="node-card brutal-card" data-category={cat.id}>
+          <div class="node-header">
+            <div class="node-meta">
+              <span class="node-code mono">{cat.nodeCode}</span>
+              <span class={`tag tag-${cat.accent}`}>{cat.badge}</span>
+            </div>
+            <h3 class="node-title">{cat.title}</h3>
+          </div>
+
+          <div class="node-skills-list">
+            {cat.skills.map((skill) => (
+              <div class="skill-pill-item">
+                <div class="skill-pill-top">
+                  <span class="skill-name">{skill.name}</span>
+                  <span class="skill-level mono">{skill.level}</span>
+                </div>
+                <p class="skill-desc">{skill.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</SectionTile>
+
+<script>
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.node-card');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const target = btn.getAttribute('data-target');
+
+      cards.forEach(card => {
+        const cat = card.getAttribute('data-category');
+        if (target === 'all' || cat === target) {
+          (card as HTMLElement).style.display = 'flex';
+        } else {
+          (card as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .topology-banner {
+    background: var(--ink);
+    color: var(--signal-yellow);
+    border: 2px solid var(--ink);
+    padding: 0.6rem 1rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .pulse-icon {
+    color: var(--terminal-green);
+    margin-right: 0.4rem;
+  }
+
+  .skill-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .filter-btn {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.4rem 0.85rem;
+    background: #FFFFFF;
+    border: 2px solid var(--ink);
+    box-shadow: 2px 2px 0 var(--ink);
+    cursor: pointer;
+    transition: all 0.12s ease;
+  }
+
+  .filter-btn:hover {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 var(--ink);
+    background: var(--signal-yellow-light);
+  }
+
+  .filter-btn.active {
+    background: var(--signal-yellow);
+    box-shadow: 3px 3px 0 var(--ink);
+    transform: translate(-1px, -1px);
+  }
+
+  .nodes-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .nodes-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .nodes-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .node-card {
+    display: flex;
+    flex-direction: column;
+    background: #FFFFFF;
+    height: 100%;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .node-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-hard-lg);
+  }
+
+  .node-header {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  .node-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .node-code {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #666666;
+  }
+
+  .node-title {
+    font-size: 1.15rem;
+    line-height: 1.25;
+    color: var(--ink);
+  }
+
+  .node-skills-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    flex-grow: 1;
+  }
+
+  .skill-pill-item {
+    background: #F8F8FA;
+    border: 1px solid var(--ink);
+    padding: 0.6rem 0.75rem;
+    box-shadow: 2px 2px 0 rgba(16, 16, 16, 0.15);
+    transition: transform 0.1s ease, background-color 0.1s ease;
+  }
+
+  .skill-pill-item:hover {
+    transform: translate(1px, 1px);
+    background: #FFFFFF;
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .skill-pill-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.2rem;
+  }
+
+  .skill-name {
+    font-family: var(--font-subhead);
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--ink);
+  }
+
+  .skill-level {
+    font-size: 0.68rem;
+    font-weight: 700;
+    background: var(--paper);
+    padding: 0.1rem 0.35rem;
+    border: 1px solid rgba(16, 16, 16, 0.3);
+    color: #444444;
+  }
+
+  .skill-desc {
+    font-size: 0.76rem;
+    color: #555555;
+    line-height: 1.35;
+  }
+
+  .hide-mobile {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .hide-mobile {
+      display: block;
+    }
+  }
+</style>

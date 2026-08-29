@@ -1,0 +1,174 @@
+---
+interface Props {
+  role: string;
+  org: string;
+  period: string;
+  location?: string;
+  badge?: string;
+  bullets: string[];
+  tech?: string[];
+  index: number;
+}
+
+const {
+  role,
+  org,
+  period,
+  location,
+  badge = "Verified Experience",
+  bullets,
+  tech = [],
+  index,
+} = Astro.props;
+---
+
+<div class="experience-card brutal-card">
+  <div class="exp-header">
+    <div class="exp-meta-left">
+      <span class="exp-idx mono">EXP_0{index + 1}</span>
+      <span class="tag tag-yellow">{badge}</span>
+      <span class="exp-period mono">📅 {period}</span>
+    </div>
+    {location && <span class="exp-location mono">📍 {location}</span>}
+  </div>
+
+  <div class="exp-titles">
+    <h3 class="exp-role">{role}</h3>
+    <h4 class="exp-org">@ {org}</h4>
+  </div>
+
+  <!-- Bullet Points -->
+  <ul class="exp-bullets">
+    {
+      bullets.map((bullet) => (
+        <li class="bullet-item">
+          <span class="bullet-marker">►</span>
+          <span class="bullet-text">{bullet}</span>
+        </li>
+      ))
+    }
+  </ul>
+
+  <!-- Tech Tags -->
+  {
+    tech.length > 0 && (
+      <div class="exp-tech-bar">
+        <span class="tech-label mono">TECH STACK:</span>
+        <div class="tech-tags">
+          {tech.map((t) => (
+            <span class="tag tag-blue">{t}</span>
+          ))}
+        </div>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .experience-card {
+    background: #FFFFFF;
+    margin-bottom: 1.5rem;
+    position: relative;
+    border-left: 6px solid var(--circuit-blue);
+  }
+
+  .exp-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px dashed rgba(16, 16, 16, 0.2);
+    margin-bottom: 1rem;
+  }
+
+  .exp-meta-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .exp-idx {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #666666;
+  }
+
+  .exp-period {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--paper);
+    padding: 0.15rem 0.5rem;
+    border: 1px solid var(--ink);
+  }
+
+  .exp-location {
+    font-size: 0.78rem;
+    color: #555555;
+  }
+
+  .exp-titles {
+    margin-bottom: 1rem;
+  }
+
+  .exp-role {
+    font-size: 1.4rem;
+    color: var(--ink);
+    margin-bottom: 0.25rem;
+  }
+
+  .exp-org {
+    font-family: var(--font-subhead);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--circuit-blue);
+  }
+
+  .exp-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .bullet-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    color: #2D3139;
+    line-height: 1.55;
+  }
+
+  .bullet-marker {
+    color: var(--alert-red);
+    font-size: 0.75rem;
+    margin-top: 0.35rem;
+    flex-shrink: 0;
+  }
+
+  .exp-tech-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    padding-top: 0.85rem;
+    border-top: 2px solid var(--ink);
+  }
+
+  .tech-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #666666;
+  }
+
+  .tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+</style>

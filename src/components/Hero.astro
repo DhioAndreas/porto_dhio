@@ -1,0 +1,257 @@
+---
+import StatusBar from "./StatusBar.astro";
+---
+
+<section class="hero-section" id="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <!-- Left Column: Bio & Calls to Action -->
+      <div class="hero-main">
+        <div class="hero-meta-strip">
+          <span class="tag tag-yellow">PORTFOLIO // SYSTEM ONLINE</span>
+          <span class="tag tag-blue">JAKARTA TIMUR, ID</span>
+        </div>
+
+        <h1 class="hero-name">
+          DHIO ANDREAS<br />
+          <span class="highlight-text">GEMILANG</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          <strong class="role-bold">Full-Stack Developer</strong> · <strong>IT Graduate (IPK 3.34)</strong> · <strong>Cisco CCNAv7 Certified</strong>
+        </p>
+
+        <p class="hero-pitch">
+          Mengintegrasikan keahlian <strong>Full-Stack Web & Mobile</strong> (Python, PHP, React.js, Laravel) dengan fondasi kuat <strong>Jaringan Komputer</strong> dan manajemen <strong>K3 (Keselamatan Kerja)</strong>. Berpengalaman dalam pelabelan dataset AI, kepemimpinan publik, dan otomasi sistem.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="hero-actions">
+          <a href="#projects" class="btn btn-primary">
+            <span>Lihat Proyek</span>
+            <span class="btn-icon">⚡</span>
+          </a>
+          <a href="#contact" class="btn btn-blue">
+            <span>Hubungi Saya</span>
+            <span class="btn-icon">📨</span>
+          </a>
+          <a href="#skills" class="btn">
+            <span>Node Matrix</span>
+            <span class="btn-icon">🌐</span>
+          </a>
+        </div>
+
+        <!-- Quick Contacts Badges -->
+        <div class="hero-contacts-bar">
+          <a href="mailto:dhioandreas50@gmail.com" class="contact-pill">
+            <span class="mono">✉ dhioandreas50@gmail.com</span>
+          </a>
+          <a href="https://wa.me/6282115107236" target="_blank" rel="noopener noreferrer" class="contact-pill">
+            <span class="mono">📱 +62 821-1510-7236</span>
+          </a>
+          <span class="contact-pill">
+            <span class="mono">📍 Klender, Jakarta Timur</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Right Column: Status Bar Widget & Stats -->
+      <div class="hero-sidebar">
+        <!-- Terminal Status Bar Component -->
+        <StatusBar />
+
+        <!-- Key Metrics Quad Grid -->
+        <div class="stats-quad-grid">
+          <div class="stat-box">
+            <span class="stat-number">3.34</span>
+            <span class="stat-label">IPK / 4.00 (S1 TI)</span>
+          </div>
+          <div class="stat-box stat-box-yellow">
+            <span class="stat-number">CCNAv7</span>
+            <span class="stat-label">Cisco Certified</span>
+          </div>
+          <div class="stat-box stat-box-blue">
+            <span class="stat-number">6+</span>
+            <span class="stat-label">Certifications</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number">9+ Thn</span>
+            <span class="stat-label">Leadership & Civic</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Hazard Caution Accent Bar -->
+<div class="hazard-stripe"></div>
+
+<style>
+  .hero-section {
+    padding: 3rem 0 3.5rem 0;
+    background-color: var(--paper);
+    position: relative;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  @media (min-width: 1024px) {
+    .hero-grid {
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 3rem;
+    }
+  }
+
+  .hero-meta-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .hero-name {
+    font-size: 2.75rem;
+    line-height: 0.98;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.03em;
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.08);
+  }
+
+  @media (min-width: 640px) {
+    .hero-name {
+      font-size: 3.8rem;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .hero-name {
+      font-size: 4.3rem;
+    }
+  }
+
+  .highlight-text {
+    background: var(--signal-yellow);
+    padding: 0 0.4rem;
+    display: inline-block;
+    border: 3px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    margin-top: 0.2rem;
+  }
+
+  .hero-subtitle {
+    font-family: var(--font-subhead);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 1rem;
+    line-height: 1.4;
+  }
+
+  .role-bold {
+    color: var(--circuit-blue);
+  }
+
+  .hero-pitch {
+    font-size: 1.05rem;
+    color: #2D3139;
+    line-height: 1.65;
+    margin-bottom: 1.75rem;
+    max-width: 620px;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .btn-icon {
+    font-size: 1.1rem;
+  }
+
+  .hero-contacts-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .contact-pill {
+    display: inline-flex;
+    align-items: center;
+    background: #FFFFFF;
+    border: 2px solid var(--ink);
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+    box-shadow: 2px 2px 0 var(--ink);
+    transition: transform 0.1s ease;
+  }
+
+  .contact-pill:hover {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 var(--ink);
+    background: var(--signal-yellow-light);
+  }
+
+  /* Stats Quad Grid */
+  .stats-quad-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
+  .stat-box {
+    background: #FFFFFF;
+    border: var(--border-thick);
+    box-shadow: var(--shadow-hard-sm);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.1s ease;
+  }
+
+  .stat-box:hover {
+    transform: translate(2px, 2px);
+    box-shadow: var(--shadow-pressed);
+  }
+
+  .stat-box-yellow {
+    background: var(--signal-yellow);
+  }
+
+  .stat-box-blue {
+    background: var(--circuit-blue);
+    color: #FFFFFF;
+  }
+  .stat-box-blue .stat-number,
+  .stat-box-blue .stat-label {
+    color: #FFFFFF;
+  }
+
+  .stat-number {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    line-height: 1;
+    color: var(--ink);
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #444444;
+  }
+</style>

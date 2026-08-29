@@ -1,0 +1,19 @@
+{
+  "name": "dhio-portfolio",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Portfolio of Dhio Andreas Gemilang - Full-Stack Developer & IT Graduate",
+  "scripts": {
+    "dev": "astro dev --host",
+    "start": "astro dev --host",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^5.4.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^5.7.3"
+  }
+}
