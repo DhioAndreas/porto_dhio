@@ -1,316 +1,330 @@
 ---
-import SectionTile from "./SectionTile.astro";
+// AboutSection.astro — Neubrutalism About Bento
 ---
 
-<SectionTile
-  id="about"
-  code="SEC-01 // ABOUT_PROFILE"
-  title="TENTANG SAYA"
-  subtitle="Profil profesional, latar belakang akademik, dan perpaduan disiplin rekayasa perangkat lunak, jaringan, & keselamatan kerja."
-  accent="yellow"
->
-  <div class="about-grid">
-    <!-- Left: Deep Bio & Philosophy -->
-    <div class="about-content">
-      <div class="brutal-card about-card">
-        <div class="card-tag-badge">
-          <span class="mono">SUMMARY // PROFILE_STATEMENT</span>
-        </div>
-        <p class="about-lead">
-          Lulusan <strong>Sarjana Teknologi Informasi</strong> (Universitas Darma Persada, 2025, <strong>IPK 3.34/4.00</strong>) dengan pengalaman langsung membangun aplikasi web dan mobile full-stack menggunakan <strong>Python, PHP, JavaScript, React.js, dan Laravel</strong>.
-        </p>
-        <p class="about-body">
-          Keahlian software engineering saya diperkuat dengan sertifikasi jaringan <strong>Cisco CCNAv7: Introduction to Networks</strong> dan <strong>Cisco IT Essentials</strong>, memberikan pemahaman holistik mulai dari lapisan kode, database, hingga komunikasi protokol jaringan dan keamanan infrastruktur.
-        </p>
-        <p class="about-body">
-          Selain kompetensi teknis, saya memiliki rekam jejak kepemimpinan nyata di masyarakat dan organisasi: memimpin komunitas roda dua skala regional, mengoordinasikan operasional pelabelan data AI di <strong>KUPU ID</strong>, dan mengabdi sebagai <strong>Sekretaris RT 005/RW 002 Klender</strong> sejak 2017. Saya juga tersertifikasi dalam disiplin <strong>Kesehatan & Keselamatan Kerja (K3)</strong> mencakup Job Safety Analysis, Fire Safety, dan First Aid.
-        </p>
+<section id="about" class="section about-section">
+  <div class="container">
 
-        <!-- 4 Core Pillars Grid -->
-        <div class="pillars-grid">
-          <div class="pillar-item">
-            <div class="pillar-icon">💻</div>
-            <div class="pillar-info">
-              <h4 class="pillar-title">Full-Stack Dev</h4>
-              <p class="pillar-desc">PHP/Laravel, React.js, Python, REST API, & MySQL</p>
-            </div>
-          </div>
-          <div class="pillar-item">
-            <div class="pillar-icon">🌐</div>
-            <div class="pillar-info">
-              <h4 class="pillar-title">Networking</h4>
-              <p class="pillar-desc">Cisco CCNAv7, IT Essentials, Subnetting & Routing</p>
-            </div>
-          </div>
-          <div class="pillar-item">
-            <div class="pillar-icon">🤖</div>
-            <div class="pillar-info">
-              <h4 class="pillar-title">AI & Annotation</h4>
-              <p class="pillar-desc">Dataset QA, Computer Vision & Machine Learning</p>
-            </div>
-          </div>
-          <div class="pillar-item">
-            <div class="pillar-icon">🦺</div>
-            <div class="pillar-info">
-              <h4 class="pillar-title">K3 & Leadership</h4>
-              <p class="pillar-desc">JSA, Fire Safety, First Aid, & Manajemen Komunitas</p>
-            </div>
-          </div>
-        </div>
+    <!-- Section header -->
+    <div class="section-hdr">
+      <div class="section-label">
+        <span class="mono">// 01 — Tentang Saya</span>
       </div>
+      <h2 class="section-title">About Me</h2>
     </div>
 
-    <!-- Right: Profile Specification Sheet -->
-    <div class="about-specs">
-      <div class="brutal-card specs-card">
-        <div class="specs-header">
-          <span class="mono header-code">&gt; SYSTEM SPECIFICATION SHEET</span>
-          <span class="tag tag-yellow">VERIFIED</span>
-        </div>
+    <!-- Bento Grid -->
+    <div class="about-bento">
 
-        <!-- Profile Photo Frame -->
-        <div class="specs-photo-frame">
-          <img src="/images/pas_foto.jpg" alt="Foto Profil Dhio Andreas Gemilang" class="specs-photo-img" />
-          <div class="photo-meta-tag mono">
-            <span class="photo-dot">●</span> DHIO ANDREAS GEMILANG, S.Kom
+      <!-- Main Bio Card -->
+      <div class="ab-tile ab-bio" id="about-bio">
+        <h3 class="bio-heading">
+          Saya membangun <em>sistem digital</em> yang benar-benar bekerja.
+        </h3>
+        <p>
+          Saya Dhio Andreas Gemilang — Sarjana Teknologi Informasi dari Universitas Darma Persada (IPK 3.34).
+          Perpaduan latar belakang elektronika dari SMKN 5 Jakarta dan studi formal Teknologi Informasi
+          membentuk cara pandang saya yang <strong>berorientasi sistem</strong>:
+          saya tidak hanya menulis kode — saya merancang alur, menganalisis masalah,
+          dan membangun solusi yang bisa diandalkan.
+        </p>
+        <p>
+          Berpengalaman sebagai <strong>Full-Stack Developer</strong> (Laravel, React, Flutter, Python)
+          dan <strong>Data Annotator ML</strong> di KUPU ID.
+          Proyek saya mencakup sistem deteksi gigi berbasis CNN, chatbot LLM interaktif,
+          hingga platform reservasi tiket bus.
+        </p>
+        <p>
+          Di luar kode, saya aktif dalam organisasi kemasyarakatan sebagai Ketua SGI,
+          anggota KPPS, dan pernah mengemban peran Sekretaris RT.
+          Saya percaya tanggung jawab publik membentuk karakter profesional.
+        </p>
+      </div>
+
+      <!-- Principles card -->
+      <div class="ab-tile ab-principles" id="about-principles">
+        <h4 class="tile-label mono">// Prinsip Kerja</h4>
+        <ul class="principle-list">
+          <li>
+            <span class="pr-number">01</span>
+            <span><strong>Clarity First</strong> — Kode bersih lebih berharga dari kode pintar yang sulit dibaca.</span>
+          </li>
+          <li>
+            <span class="pr-number">02</span>
+            <span><strong>Own The Problem</strong> — Pahami dulu masalahnya sebelum menulis baris pertama.</span>
+          </li>
+          <li>
+            <span class="pr-number">03</span>
+            <span><strong>Ship, Then Iterate</strong> — Lebih baik versi 1 berjalan daripada versi sempurna yang tak pernah selesai.</span>
+          </li>
+          <li>
+            <span class="pr-number">04</span>
+            <span><strong>Learn Out Loud</strong> — Berbagi pengetahuan mempercepat pertumbuhan tim.</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Education snap card -->
+      <div class="ab-tile ab-edu" id="about-edu">
+        <h4 class="tile-label mono">// Pendidikan</h4>
+        <div class="edu-item">
+          <div class="edu-badge-row">
+            <span class="tag tag-blue">S-1 · 2021–2025</span>
+          </div>
+          <p class="edu-name">Sarjana Teknologi Informasi</p>
+          <p class="edu-org">Universitas Darma Persada, Jakarta</p>
+          <div class="gpa-row">
+            <span class="gpa-box">IPK&nbsp;<strong>3.34</strong> / 4.00</span>
           </div>
         </div>
-
-        <div class="specs-table mono">
-          <div class="spec-row">
-            <span class="spec-label">NAMA LENGKAP</span>
-            <span class="spec-value">Dhio Andreas Gemilang</span>
+        <div class="edu-divider"></div>
+        <div class="edu-item">
+          <div class="edu-badge-row">
+            <span class="tag">SMK · 2015–2018</span>
           </div>
-          <div class="spec-row">
-            <span class="spec-label">GELAR AKADEMIK</span>
-            <span class="spec-value">S.Kom / S-1 Teknologi Informasi</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-label">KAMPUS</span>
-            <span class="spec-value">Universitas Darma Persada (2021-2025)</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-label">IPK KUMULATIF</span>
-            <span class="spec-value highlight-val">3.34 / 4.00 (Sangat Memuaskan)</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-label">PENDIDIKAN AWAL</span>
-            <span class="spec-value">SMKN 5 Jakarta (Audio Video, 2015-2018)</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-label">LOKASI DOMISILI</span>
-            <span class="spec-value">Klender, Duren Sawit, Jakarta Timur</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-label">LISENSI BERKENDARA</span>
-            <span class="spec-value">SIM C (Aktif)</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-label">KETERSEDIAAN</span>
-            <span class="spec-value text-green">● Siap Bekerja (Full-Time / On-site / Remote)</span>
-          </div>
-        </div>
-
-        <div class="specs-footer">
-          <a href="#contact" class="btn btn-sm btn-primary" style="width: 100%;">
-            <span>Kirim Pesan Langsung ✉</span>
-          </a>
+          <p class="edu-name">Teknik Elektronika — Audio Video</p>
+          <p class="edu-org">SMKN 5 Jakarta</p>
         </div>
       </div>
+
+      <!-- Fun Facts tile -->
+      <div class="ab-tile ab-facts" id="about-facts">
+        <h4 class="tile-label mono">// Fact Sheet</h4>
+        <div class="fact-grid">
+          <div class="fact-item">
+            <span class="fact-val">4+</span>
+            <span class="fact-key">Proyek Selesai</span>
+          </div>
+          <div class="fact-item">
+            <span class="fact-val">6+</span>
+            <span class="fact-key">Sertifikasi</span>
+          </div>
+          <div class="fact-item">
+            <span class="fact-val">9+</span>
+            <span class="fact-key">Tahun Coding</span>
+          </div>
+          <div class="fact-item">
+            <span class="fact-val">4</span>
+            <span class="fact-key">Org. Diikuti</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
-</SectionTile>
+</section>
 
 <style>
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.75rem;
+  .about-section { background: transparent; }
+
+  .section-hdr { margin-bottom: 2rem; }
+
+  .section-label {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: var(--ink);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    border: var(--border-2);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 0.6rem;
+    text-transform: uppercase;
   }
 
-  @media (min-width: 960px) {
-    .about-grid {
-      grid-template-columns: 1.25fr 0.75fr;
+  .section-title {
+    font-size: 2.2rem;
+  }
+  @media (min-width: 768px) { .section-title { font-size: 2.8rem; } }
+
+  /* ── Bento ── */
+  .about-bento {
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "bio"
+      "principles"
+      "edu"
+      "facts";
+  }
+
+  @media (min-width: 768px) {
+    .about-bento {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "bio        bio"
+        "principles edu"
+        "facts      edu";
     }
   }
 
-  .about-card {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+  @media (min-width: 1024px) {
+    .about-bento {
+      grid-template-columns: 1fr 320px 240px;
+      grid-template-areas:
+        "bio bio   edu"
+        "bio bio   edu"
+        "principles principles facts";
+    }
   }
 
-  .card-tag-badge {
-    margin-bottom: 1rem;
-    font-size: 0.78rem;
+  /* ── Tile Base ── */
+  .ab-tile {
+    background: var(--paper-card);
+    border: var(--border);
+    box-shadow: var(--shadow);
+    padding: 1.75rem;
+  }
+
+  /* Bio */
+  .ab-bio { grid-area: bio; }
+
+  .bio-heading {
+    font-family: var(--font-sub);
+    font-size: 1.3rem;
     font-weight: 700;
-    color: var(--circuit-blue);
-  }
-
-  .about-lead {
-    font-size: 1.18rem;
-    line-height: 1.6;
+    line-height: 1.35;
     margin-bottom: 1rem;
+    text-transform: none;
     color: var(--ink);
   }
 
-  .about-body {
-    font-size: 0.98rem;
-    line-height: 1.65;
-    color: #333333;
+  .bio-heading em {
+    font-style: italic;
+    text-decoration: underline;
+    text-decoration-color: var(--yellow);
+    text-decoration-thickness: 3px;
+    text-underline-offset: 4px;
+    font-style: normal;
+  }
+
+  .ab-bio p {
+    font-size: 0.93rem;
+    line-height: 1.75;
+    color: #333;
+    margin-bottom: 0.85rem;
+  }
+  .ab-bio p:last-child { margin-bottom: 0; }
+  .ab-bio strong { color: var(--ink); font-weight: 700; }
+
+  /* Principles */
+  .ab-principles { grid-area: principles; }
+
+  .tile-label {
+    font-size: 0.68rem;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
     margin-bottom: 1rem;
+    display: block;
   }
 
-  .pillars-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.85rem;
-    margin-top: 1.25rem;
-    padding-top: 1.25rem;
-    border-top: 2px dashed rgba(16, 16, 16, 0.2);
-  }
-
-  @media (min-width: 600px) {
-    .pillars-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  .pillar-item {
+  .principle-list {
+    list-style: none;
     display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .principle-list li {
+    display: flex;
+    gap: 0.85rem;
     align-items: flex-start;
+    font-size: 0.87rem;
+    line-height: 1.5;
+    color: #333;
+  }
+
+  .pr-number {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--blue);
+    flex-shrink: 0;
+    margin-top: 2px;
+    background: var(--blue-light);
+    border: var(--border-2);
+    padding: 0.1rem 0.35rem;
+  }
+
+  /* Education */
+  .ab-edu { grid-area: edu; }
+
+  .edu-badge-row { margin-bottom: 0.5rem; }
+
+  .edu-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.75rem 0;
+  }
+
+  .edu-name {
+    font-family: var(--font-sub);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .edu-org {
+    font-size: 0.82rem;
+    color: #666;
+  }
+
+  .gpa-row { margin-top: 0.4rem; }
+
+  .gpa-box {
+    display: inline-block;
+    background: var(--yellow);
+    border: var(--border-2);
+    padding: 0.2rem 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .gpa-box strong { color: var(--ink); }
+
+  .edu-divider {
+    height: 3px;
+    background: var(--ink);
+    margin: 0.25rem 0;
+  }
+
+  /* Facts */
+  .ab-facts { grid-area: facts; }
+
+  .fact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 0.75rem;
-    background: #F6F6F8;
-    border: 2px solid var(--ink);
-    padding: 0.75rem;
+    margin-top: 0.75rem;
+  }
+
+  .fact-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.85rem 0.5rem;
+    border: var(--border-2);
+    background: var(--yellow-light);
+    text-align: center;
     box-shadow: 2px 2px 0 var(--ink);
   }
 
-  .pillar-icon {
-    font-size: 1.35rem;
+  .fact-val {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--ink);
     line-height: 1;
-    padding: 0.35rem;
-    background: #FFFFFF;
-    border: 1px solid var(--ink);
   }
 
-  .pillar-title {
-    font-family: var(--font-subhead);
-    font-size: 0.92rem;
-    font-weight: 700;
-    margin-bottom: 0.15rem;
-  }
-
-  .pillar-desc {
-    font-size: 0.78rem;
-    color: #555555;
-    line-height: 1.35;
-  }
-
-  /* Specs Card */
-  .specs-card {
-    background: #FFFFFF;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  .specs-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 0.75rem;
-    border-bottom: 2px solid var(--ink);
-    margin-bottom: 1rem;
-  }
-
-  .specs-photo-frame {
-    width: 100%;
-    height: 220px;
-    background: var(--paper);
-    border: 2px solid var(--ink);
-    margin-bottom: 1.25rem;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 3px 3px 0 var(--ink);
-  }
-
-  .specs-photo-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: top center;
-  }
-
-  .photo-meta-tag {
-    position: absolute;
-    bottom: 6px;
-    left: 6px;
-    right: 6px;
-    background: rgba(16, 16, 16, 0.9);
-    color: var(--signal-yellow);
-    font-size: 0.7rem;
-    font-weight: 700;
-    padding: 0.25rem 0.5rem;
-    border: 1px solid var(--signal-yellow);
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-  }
-
-  .photo-dot {
-    color: var(--terminal-green);
-  }
-
-  .header-code {
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--ink);
-  }
-
-  .specs-table {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    font-size: 0.82rem;
-  }
-
-  .spec-row {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    padding-bottom: 0.6rem;
-    border-bottom: 1px dashed rgba(16, 16, 16, 0.15);
-  }
-
-  .spec-label {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: #777777;
-  }
-
-  .spec-value {
-    color: var(--ink);
+  .fact-key {
+    font-size: 0.68rem;
     font-weight: 600;
-    line-height: 1.3;
-  }
-
-  .highlight-val {
-    background: var(--signal-yellow);
-    padding: 0.1rem 0.35rem;
-    border: 1px solid var(--ink);
-    width: fit-content;
-  }
-
-  .text-green {
-    color: #059669;
-    font-weight: 700;
-  }
-
-  .specs-footer {
-    margin-top: 1.5rem;
-    padding-top: 1rem;
-    border-top: 2px solid var(--ink);
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 0.25rem;
   }
 </style>

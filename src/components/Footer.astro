@@ -1,265 +1,189 @@
 ---
+// Footer.astro — Neubrutalism Footer
+const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-  <div class="hazard-stripe"></div>
+  <div class="container">
+    <div class="footer-inner">
 
-  <div class="container footer-content">
-    <div class="footer-grid">
-      <!-- Col 1: Brand & Bio Summary -->
-      <div class="footer-col footer-col-brand">
-        <div class="footer-brand-badge">
-          <span class="brand-initials">DAG</span>
-          <span class="brand-divider">/</span>
-          <span class="brand-name">DHIO ANDREAS GEMILANG</span>
-        </div>
-        <p class="footer-bio">
-          Full-Stack Developer, Sarjana Teknologi Informasi (IPK 3.34), pemegang sertifikasi jaringan Cisco CCNAv7 & K3 Safety Practitioner. Berdomisili di Klender, Jakarta Timur.
-        </p>
-        <div class="footer-status-pill mono">
-          <span class="status-green-dot">●</span>
-          <span>AVAILABLE FOR NEW OPPORTUNITIES</span>
-        </div>
+      <!-- Brand -->
+      <div class="footer-brand">
+        <span class="footer-logo">DAG</span>
+        <p class="footer-name">Dhio Andreas Gemilang</p>
+        <p class="footer-tagline">Full-Stack Developer · Jakarta, Indonesia</p>
       </div>
 
-      <!-- Col 2: Navigation Sitemap -->
-      <div class="footer-col">
-        <h4 class="footer-col-title mono">&gt; SITE NAVIGATION</h4>
-        <ul class="footer-nav-list">
-          <li><a href="#hero">00. Home & Status Terminal</a></li>
-          <li><a href="#about">01. About Profile & Pillars</a></li>
-          <li><a href="#skills">02. Skills & Node Matrix</a></li>
-          <li><a href="#experience">03. Professional Experience</a></li>
-          <li><a href="#projects">04. Featured Projects</a></li>
-          <li><a href="#leadership">05. Leadership & Civic Roles</a></li>
-          <li><a href="#education">06. Education & Certifications</a></li>
-          <li><a href="#contact">07. Contact & Dispatch</a></li>
-        </ul>
+      <!-- Quick Links -->
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="#about"          class="footer-link">Tentang</a>
+        <a href="#skills"         class="footer-link">Keahlian</a>
+        <a href="#experience"     class="footer-link">Pengalaman</a>
+        <a href="#projects"       class="footer-link">Proyek</a>
+        <a href="#certifications" class="footer-link">Sertifikasi</a>
+        <a href="#leadership"     class="footer-link">Organisasi</a>
+        <a href="#contact"        class="footer-link">Kontak</a>
+      </nav>
+
+      <!-- Socials -->
+      <div class="footer-socials">
+        <a
+          href="https://linkedin.com/in/dhioandreas"
+          target="_blank"
+          rel="noopener"
+          class="social-pill"
+          aria-label="LinkedIn"
+        >in</a>
+        <a
+          href="https://github.com/DhioAndreas"
+          target="_blank"
+          rel="noopener"
+          class="social-pill"
+          aria-label="GitHub"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+        </a>
+        <a
+          href="mailto:dhioandreas4@gmail.com"
+          class="social-pill"
+          aria-label="Email"
+        >@</a>
       </div>
 
-      <!-- Col 3: Direct Connect & Live Clock -->
-      <div class="footer-col">
-        <h4 class="footer-col-title mono">&gt; SYSTEM CLOCK & CONTACT</h4>
-        <div class="live-clock-card mono" id="live-clock-widget">
-          <span class="clock-label">JAKARTA LOCAL TIME (WIB):</span>
-          <span class="clock-time" id="jakarta-time">--:--:-- WIB</span>
-          <span class="clock-tz">UTC+07:00 · ASIA/JAKARTA</span>
-        </div>
-
-        <div class="footer-quick-reach mono">
-          <div>✉ <a href="mailto:dhioandreas50@gmail.com">dhioandreas50@gmail.com</a></div>
-          <div>📱 <a href="https://wa.me/6282115107236">+62 821-1510-7236</a></div>
-          <div>📍 Klender, Jakarta Timur (13470)</div>
-        </div>
-
-        <button id="back-to-top-btn" class="btn btn-sm btn-primary" style="margin-top: 1rem; width: 100%;">
-          <span>Kembali ke Atas ↑</span>
-        </button>
-      </div>
     </div>
 
-    <!-- Bottom Bar -->
-    <div class="footer-bottom-bar">
-      <div class="mono footer-copy">
-        © 2026 DHIO ANDREAS GEMILANG. BUILT WITH ASTRO & NEUBRUTALISM SIGNAL GRID.
-      </div>
-      <div class="mono footer-specs hide-mobile">
-        HOST_STATUS: 200 OK · CCNAv7 // K3 VERIFIED
-      </div>
+    <!-- Bottom bar -->
+    <div class="footer-bottom">
+      <span class="mono footer-copy">© {year} Dhio Andreas Gemilang. All rights reserved.</span>
+      <a href="#hero" class="back-top btn btn-yellow btn-sm">↑ Kembali ke atas</a>
     </div>
   </div>
 </footer>
 
-<script>
-  // Live Jakarta WIB Clock
-  function updateJakartaTime() {
-    const clockEl = document.getElementById('jakarta-time');
-    if (!clockEl) return;
-
-    const now = new Date();
-    const options: Intl.DateTimeFormatOptions = {
-      timeZone: 'Asia/Jakarta',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false
-    };
-    const timeString = new Intl.DateTimeFormat('id-ID', options).format(now);
-    clockEl.textContent = `${timeString} WIB`;
-  }
-
-  updateJakartaTime();
-  setInterval(updateJakartaTime, 1000);
-
-  // Back to Top Button
-  const backToTopBtn = document.getElementById('back-to-top-btn');
-  if (backToTopBtn) {
-    backToTopBtn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  }
-</script>
-
 <style>
   .site-footer {
-    background-color: var(--ink);
-    color: #EDEDED;
-    border-top: var(--border-thick);
+    background: var(--ink);
+    border-top: var(--border);
+    color: #fff;
     margin-top: 4rem;
   }
 
-  .footer-content {
-    padding-top: 3rem;
-    padding-bottom: 2rem;
-  }
-
-  .footer-grid {
+  .footer-inner {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2.5rem;
-    padding-bottom: 2.5rem;
-    border-bottom: 1px solid #2B2F3D;
+    gap: 2rem;
+    padding: 3rem 0 2rem;
   }
 
   @media (min-width: 768px) {
-    .footer-grid {
-      grid-template-columns: 1.2fr 1fr 1fr;
+    .footer-inner {
+      grid-template-columns: 200px 1fr auto;
+      align-items: start;
     }
   }
 
-  .footer-brand-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
+  /* Brand */
+  .footer-logo {
+    display: inline-block;
     font-family: var(--font-display);
-    font-size: 1.15rem;
-    color: #FFFFFF;
-    background: #1C202C;
-    padding: 0.45rem 0.75rem;
-    border: 2px solid #3B4256;
-    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    background: var(--yellow);
+    color: var(--ink);
+    padding: 0.2rem 0.55rem;
+    border: var(--border-2);
+    margin-bottom: 0.6rem;
   }
 
-  .brand-initials {
-    color: var(--signal-yellow);
-  }
-
-  .brand-divider {
-    color: #666666;
-  }
-
-  .footer-bio {
-    font-size: 0.9rem;
-    color: #B0B5C4;
-    line-height: 1.6;
-    margin-bottom: 1.25rem;
-  }
-
-  .footer-status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    background: rgba(0, 200, 83, 0.12);
-    border: 1px solid var(--terminal-green);
-    color: var(--terminal-green);
-    font-size: 0.74rem;
+  .footer-name {
+    font-family: var(--font-sub);
+    font-size: 0.95rem;
     font-weight: 700;
-    padding: 0.3rem 0.6rem;
+    color: #fff;
   }
 
-  .status-green-dot {
-    color: var(--terminal-green);
-    animation: pulse 1.5s infinite;
+  .footer-tagline {
+    font-size: 0.75rem;
+    color: #999;
+    margin-top: 0.2rem;
   }
 
-  .footer-col-title {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--signal-yellow);
-    margin-bottom: 1rem;
-    letter-spacing: 0.05em;
-  }
-
-  .footer-nav-list {
-    list-style: none;
+  /* Nav */
+  .footer-nav {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
   }
 
-  .footer-nav-list a {
-    color: #C2C7D6;
-    font-family: var(--font-subhead);
-    font-size: 0.9rem;
-    font-weight: 600;
-    transition: color 0.15s ease, padding-left 0.15s ease;
-  }
-
-  .footer-nav-list a:hover {
-    color: var(--signal-yellow);
-    padding-left: 0.35rem;
-  }
-
-  .live-clock-card {
-    background: #141721;
-    border: 2px solid #2B3042;
-    padding: 0.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    margin-bottom: 1rem;
-  }
-
-  .clock-label {
-    font-size: 0.68rem;
-    color: #8C93A8;
-    font-weight: 700;
-  }
-
-  .clock-time {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--signal-yellow);
-  }
-
-  .clock-tz {
-    font-size: 0.65rem;
-    color: #6C7387;
-  }
-
-  .footer-quick-reach {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    font-size: 0.82rem;
-    color: #B0B5C4;
-  }
-
-  .footer-quick-reach a {
-    color: #FFFFFF;
-    text-decoration: underline;
-  }
-
-  .footer-quick-reach a:hover {
-    color: var(--signal-yellow);
-  }
-
-  .footer-bottom-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 1.5rem;
-    font-size: 0.78rem;
-    color: #7D8498;
-  }
-
-  .hide-mobile {
-    display: none;
-  }
-
   @media (min-width: 768px) {
-    .hide-mobile {
-      display: block;
+    .footer-nav {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 0.25rem 1.5rem;
+      align-items: flex-start;
     }
+  }
+
+  .footer-link {
+    font-family: var(--font-sub);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #aaa;
+    text-decoration: none;
+    transition: color 0.12s;
+  }
+
+  .footer-link:hover {
+    color: var(--yellow);
+  }
+
+  /* Socials */
+  .footer-socials {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+
+  .social-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: #fff;
+    color: var(--ink);
+    border: var(--border-2);
+    box-shadow: var(--shadow-sm);
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 900;
+    text-decoration: none;
+    transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+  }
+
+  .social-pill:hover {
+    background: var(--yellow);
+    transform: translate(2px, 2px);
+    box-shadow: var(--shadow-pressed);
+  }
+
+  /* Bottom */
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1.25rem 0;
+    border-top: 2px solid #222;
+  }
+
+  .footer-copy {
+    font-size: 0.72rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
 </style>

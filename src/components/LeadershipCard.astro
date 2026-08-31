@@ -1,4 +1,5 @@
 ---
+// LeadershipCard.astro — Neubrutalism
 interface Props {
   role: string;
   org: string;
@@ -8,128 +9,98 @@ interface Props {
   index: number;
 }
 
-const {
-  role,
-  org,
-  period,
-  category,
-  bullets,
-  index,
-} = Astro.props;
+const { role, org, period, category, bullets, index } = Astro.props;
+
+const catColors: Record<string, string> = {
+  Kepemimpinan:   "tag-blue",
+  Humas:          "tag-yellow",
+  Administrasi:   "tag-green",
+  Demokrasi:      "tag-purple",
+};
+const catTag = catColors[category] ?? "tag-dark";
+
+const accents = ["var(--yellow)", "var(--blue-light)", "var(--green-light)", "#F5F0FF"];
+const accentBg = accents[index % accents.length];
 ---
 
-<div class="leadership-card brutal-card">
-  <div class="lead-header">
-    <div class="lead-meta-left">
-      <span class="lead-idx mono">LEAD_0{index + 1}</span>
-      <span class="tag tag-yellow">{category}</span>
-    </div>
-    <span class="lead-period mono">📅 {period}</span>
+<article class="leadership-card nb-card nb-card-hover" id={`lead-card-${index}`} style={`--accent-bg: ${accentBg};`}>
+  <div class="lead-top">
+    <span class={`tag ${catTag}`}>{category}</span>
+    <span class="lead-period mono">{period}</span>
   </div>
 
-  <div class="lead-titles">
-    <h3 class="lead-role">{role}</h3>
-    <h4 class="lead-org">{org}</h4>
-  </div>
+  <h3 class="lead-role">{role}</h3>
+  <p class="lead-org">{org}</p>
 
-  <ul class="lead-bullets">
-    {
-      bullets.map((b) => (
-        <li>
-          <span class="bullet-caret">❯</span>
-          <span>{b}</span>
-        </li>
-      ))
-    }
-  </ul>
-</div>
+  {bullets.length > 0 && (
+    <ul class="lead-bullets">
+      {bullets.map((b) => <li>{b}</li>)}
+    </ul>
+  )}
+</article>
 
 <style>
   .leadership-card {
-    background: #FFFFFF;
-    height: 100%;
     display: flex;
     flex-direction: column;
-    border-left: 6px solid var(--signal-yellow);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    gap: 0.75rem;
+    background: var(--accent-bg, var(--paper-card));
   }
 
-  .leadership-card:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: var(--shadow-hard-lg);
-  }
-
-  .lead-header {
+  .lead-top {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 0.5rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 2px dashed rgba(16, 16, 16, 0.2);
-    margin-bottom: 0.85rem;
-  }
-
-  .lead-meta-left {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-
-  .lead-idx {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #666666;
   }
 
   .lead-period {
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     font-weight: 700;
-    background: var(--paper);
-    padding: 0.15rem 0.45rem;
-    border: 1px solid var(--ink);
-    color: var(--ink);
-  }
-
-  .lead-titles {
-    margin-bottom: 0.85rem;
+    color: #666;
+    text-transform: uppercase;
   }
 
   .lead-role {
-    font-size: 1.25rem;
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    text-transform: uppercase;
     color: var(--ink);
-    margin-bottom: 0.2rem;
   }
 
   .lead-org {
-    font-family: var(--font-subhead);
-    font-size: 0.95rem;
+    font-family: var(--font-sub);
+    font-size: 0.85rem;
     font-weight: 700;
-    color: #444444;
+    color: #555;
+    padding-left: 0.65rem;
+    border-left: 3px solid var(--ink);
   }
 
   .lead-bullets {
     list-style: none;
+    padding: 0;
+    margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    margin-top: auto;
+    gap: 0.4rem;
   }
 
   .lead-bullets li {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.45rem;
-    font-size: 0.9rem;
-    color: #2D3139;
+    position: relative;
+    padding-left: 1.2rem;
+    font-size: 0.85rem;
+    color: #333;
     line-height: 1.5;
   }
 
-  .bullet-caret {
-    color: var(--circuit-blue);
-    font-weight: 900;
-    font-size: 0.8rem;
-    margin-top: 0.15rem;
-    flex-shrink: 0;
+  .lead-bullets li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--blue);
+    font-size: 0.72rem;
+    top: 2px;
   }
 </style>

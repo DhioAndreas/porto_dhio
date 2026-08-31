@@ -1,0 +1,414 @@
+---
+---
+
+<div class="profile-bento-card glass-card">
+  <!-- Card Header with Avatar & Live Status -->
+  <div class="card-hero-header">
+    <div class="avatar-wrapper">
+      <img src="/images/pas_foto.jpg" alt="Dhio Andreas Gemilang" class="avatar-img" />
+      <span class="avatar-status-dot" title="Tersedia untuk Kerja"></span>
+    </div>
+
+    <div class="avatar-info">
+      <div class="verified-name-row">
+        <h3 class="operator-name">Dhio Andreas Gemilang</h3>
+        <span class="verified-check" title="Profil Terverifikasi">✓</span>
+      </div>
+      <p class="operator-title mono">S-1 Teknologi Informasi · IPK 3.34</p>
+      <div class="status-pill-subtle">
+        <span class="live-indicator-dot"></span>
+        <span class="status-text">Available for Hire (Full-Time / Remote)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Lens Switcher -->
+  <div class="lens-switcher-wrap" role="tablist">
+    <button class="lens-tab active" data-lens="dev" role="tab" aria-selected="true">
+      <span class="lens-icon">💻</span>
+      <span>Full-Stack</span>
+    </button>
+    <button class="lens-tab" data-lens="ai" role="tab" aria-selected="false">
+      <span class="lens-icon">🤖</span>
+      <span>AI & Data</span>
+    </button>
+    <button class="lens-tab" data-lens="net" role="tab" aria-selected="false">
+      <span class="lens-icon">🌐</span>
+      <span>Cisco CCNA</span>
+    </button>
+  </div>
+
+  <!-- Dynamic Content Panes -->
+  <div class="lens-content-panes">
+    <!-- Pane 1: Full-Stack Dev -->
+    <div class="lens-pane active" id="lens-pane-dev">
+      <div class="spec-highlight-box">
+        <div class="spec-row">
+          <span class="spec-key mono">Core Frameworks</span>
+          <span class="spec-val">Laravel, React.js, FastAPI</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key mono">Languages</span>
+          <span class="spec-val">PHP, JavaScript/TS, Python, Dart</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key mono">Database & APIs</span>
+          <span class="spec-val">MySQL, RESTful Architecture, Postman</span>
+        </div>
+      </div>
+      <div class="tags-mini-row">
+        <span class="pill-badge pill-indigo">Flutter Mobile</span>
+        <span class="pill-badge pill-cyan">Full-Stack Web</span>
+        <span class="pill-badge pill-emerald">Clean Architecture</span>
+      </div>
+    </div>
+
+    <!-- Pane 2: AI & Data Annotation -->
+    <div class="lens-pane" id="lens-pane-ai">
+      <div class="spec-highlight-box">
+        <div class="spec-row">
+          <span class="spec-key mono">Professional Role</span>
+          <span class="spec-val text-emerald">Data Annotator @ KUPU ID</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key mono">AI Specialization</span>
+          <span class="spec-val">Deep Learning CNN, Dataset QA</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key mono">Tools & ML</span>
+          <span class="spec-val">TensorFlow, Keras, Jupyter, Ollama LLM</span>
+        </div>
+      </div>
+      <div class="tags-mini-row">
+        <span class="pill-badge pill-emerald">Multimodal QA</span>
+        <span class="pill-badge pill-cyan">Computer Vision</span>
+        <span class="pill-badge pill-amber">LLM Assistant</span>
+      </div>
+    </div>
+
+    <!-- Pane 3: Cisco Network -->
+    <div class="lens-pane" id="lens-pane-net">
+      <div class="spec-highlight-box">
+        <div class="spec-row">
+          <span class="spec-key mono">Cisco Certification</span>
+          <span class="spec-val text-cyan">CCNAv7: Introduction to Networks</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key mono">IT Essentials</span>
+          <span class="spec-val">Hardware Diagnostics & OS Support</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key mono">Network Skills</span>
+          <span class="spec-val">TCP/IP, Subnetting, VLAN, Routing</span>
+        </div>
+      </div>
+      <div class="tags-mini-row">
+        <span class="pill-badge pill-cyan">Cisco Academy</span>
+        <span class="pill-badge pill-indigo">Packet Tracer</span>
+        <span class="pill-badge pill-emerald">Infrastructure</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card Footer: Direct Email Quick Copy -->
+  <div class="bento-footer">
+    <div class="footer-copy-box">
+      <span class="copy-email-label mono">Direct Email</span>
+      <span class="copy-email-text">dhioandreas50@gmail.com</span>
+    </div>
+    <button class="btn btn-sm btn-secondary copy-btn-hero" data-copy="dhioandreas50@gmail.com" title="Salin Email">
+      <span class="copy-icon-text">Salin Email 📋</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  // Lens Switcher
+  const lensTabs = document.querySelectorAll('.lens-tab');
+  const lensPanes = document.querySelectorAll('.lens-pane');
+
+  lensTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      lensTabs.forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      lensPanes.forEach(p => p.classList.remove('active'));
+
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      const lens = tab.getAttribute('data-lens');
+      const targetPane = document.getElementById(`lens-pane-${lens}`);
+      if (targetPane) {
+        targetPane.classList.add('active');
+      }
+    });
+  });
+
+  // Hero Copy Email
+  const heroCopyBtn = document.querySelector('.copy-btn-hero');
+  if (heroCopyBtn) {
+    heroCopyBtn.addEventListener('click', async () => {
+      const email = heroCopyBtn.getAttribute('data-copy') || 'dhioandreas50@gmail.com';
+      try {
+        await navigator.clipboard.writeText(email);
+        const iconSpan = heroCopyBtn.querySelector('.copy-icon-text');
+        if (iconSpan) {
+          iconSpan.textContent = 'Tersalin! ✓';
+          setTimeout(() => {
+            iconSpan.textContent = 'Salin Email 📋';
+          }, 2000);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    });
+  }
+</script>
+
+<style>
+  .profile-bento-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    background: rgba(15, 20, 34, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(99, 102, 241, 0.15);
+  }
+
+  /* Header */
+  .card-hero-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .avatar-wrapper {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  }
+
+  .avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  .avatar-status-dot {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #10B981;
+    border: 2px solid #0F1422;
+    box-shadow: 0 0 8px #10B981;
+  }
+
+  .avatar-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    overflow: hidden;
+  }
+
+  .verified-name-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .operator-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .verified-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent-primary);
+    color: #FFFFFF;
+    font-size: 0.7rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .operator-title {
+    font-size: 0.78rem;
+    color: var(--accent-cyan);
+    font-weight: 500;
+  }
+
+  .status-pill-subtle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    color: var(--accent-emerald);
+    font-weight: 500;
+    margin-top: 0.15rem;
+  }
+
+  /* Lens Switcher Tabs */
+  .lens-switcher-wrap {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.4rem;
+    background: rgba(8, 11, 19, 0.6);
+    padding: 0.35rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .lens-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.5rem 0.4rem;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .lens-tab:hover {
+    color: var(--text-heading);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .lens-tab.active {
+    background: var(--bg-surface-elevated);
+    color: var(--text-heading);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .lens-icon {
+    font-size: 0.85rem;
+  }
+
+  /* Content Panes */
+  .lens-content-panes {
+    min-height: 135px;
+  }
+
+  .lens-pane {
+    display: none;
+    flex-direction: column;
+    gap: 0.85rem;
+    animation: paneFadeIn 0.2s ease;
+  }
+
+  .lens-pane.active {
+    display: flex;
+  }
+
+  @keyframes paneFadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .spec-highlight-box {
+    background: rgba(8, 11, 19, 0.45);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+  }
+
+  .spec-key {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+
+  .spec-val {
+    color: var(--text-main);
+    font-weight: 600;
+    text-align: right;
+  }
+
+  .text-emerald {
+    color: var(--accent-emerald);
+  }
+
+  .text-cyan {
+    color: var(--accent-cyan);
+  }
+
+  .tags-mini-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  /* Bento Footer */
+  .bento-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .footer-copy-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    overflow: hidden;
+  }
+
+  .copy-email-label {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .copy-email-text {
+    font-size: 0.84rem;
+    color: var(--text-main);
+    font-weight: 600;
+    font-family: var(--font-mono);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .copy-btn-hero {
+    flex-shrink: 0;
+  }
+</style>

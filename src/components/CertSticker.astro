@@ -1,162 +1,106 @@
 ---
+// CertSticker.astro — Neubrutalism Certification Card
 interface Props {
   name: string;
   issuer: string;
-  category: "network" | "safety" | "it" | "other";
+  category: string;
   code?: string;
-  status?: string;
+  status: string;
   index: number;
 }
 
-const {
-  name,
-  issuer,
-  category,
-  code,
-  status = "Verified",
-  index,
-} = Astro.props;
+const { name, issuer, category, code, status, index } = Astro.props;
 
-// Rotating stickers slightly for playful neubrutalist sticker book aesthetic
-const rotations = ["-1deg", "1.5deg", "-1.5deg", "1deg", "-2deg", "2deg"];
-const currentRotation = rotations[index % rotations.length];
+const catMap: Record<string, { tag: string; icon: string }> = {
+  Networking:    { tag: "tag-blue",   icon: "🔌" },
+  Safety:        { tag: "tag-red",    icon: "⛑️" },
+  IT:            { tag: "tag-purple", icon: "💻" },
+  Security:      { tag: "tag-dark",   icon: "🔒" },
+};
+const meta = catMap[category] ?? { tag: "tag-dark", icon: "📄" };
 
-const isNetwork = category === "network";
-const isSafety = category === "safety";
+const verifiedTag = status === "Active" || status === "Verified";
 ---
 
-<div class={`cert-sticker-card ${isNetwork ? 'sticker-network' : isSafety ? 'sticker-safety' : ''}`} style={`--rot: ${currentRotation};`}>
-  <!-- Top Stamp Header -->
-  <div class="sticker-top">
-    <div class="sticker-tag">
-      <span class="mono">{code || `CERT-0${index + 1}`}</span>
-    </div>
-    <div class="verified-seal">
-      <span class="seal-icon">★</span>
-      <span class="mono">{status.toUpperCase()}</span>
-    </div>
+<div class="cert-card nb-card nb-card-hover" id={`cert-${index}`}>
+  <div class="cert-top">
+    <span class={`tag ${meta.tag}`}>{category}</span>
+    <span class="cert-icon">{meta.icon}</span>
   </div>
 
-  <!-- Certificate Icon & Name -->
-  <div class="sticker-body">
-    <div class="sticker-icon-badge">
-      {isNetwork ? "🌐" : isSafety ? "🦺" : "📜"}
-    </div>
-    <h4 class="cert-name">{name}</h4>
-    <p class="cert-issuer">Issued by: <strong>{issuer}</strong></p>
-  </div>
+  <h4 class="cert-name">{name}</h4>
+  <p class="cert-issuer">{issuer}</p>
 
-  <!-- Bottom Stamp Line -->
-  <div class="sticker-bottom">
-    <span class="cat-pill mono">{category.toUpperCase()} DISCIPLINE</span>
-    <span class="mono hash-id">#CC-{2024 + index}</span>
+  {code && (
+    <div class="cert-code mono">{code}</div>
+  )}
+
+  <div class="cert-status-row">
+    <span class:list={["cert-status", { "status-active": verifiedTag }]}>
+      {verifiedTag ? "✓ " : "• "}{status}
+    </span>
   </div>
 </div>
 
 <style>
-  .cert-sticker-card {
-    background: #FFFFFF;
-    border: var(--border-thick);
-    box-shadow: var(--shadow-hard);
-    padding: 1.25rem;
-    position: relative;
-    transform: rotate(var(--rot, 0deg));
-    transition: transform 0.18s cubic-bezier(0, 0, 0.2, 1), box-shadow 0.18s cubic-bezier(0, 0, 0.2, 1);
+  .cert-card {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-    cursor: default;
+    gap: 0.6rem;
+    padding: 1.25rem;
   }
 
-  .cert-sticker-card:hover {
-    transform: rotate(0deg) scale(1.03) translate(-2px, -2px);
-    box-shadow: var(--shadow-hard-lg);
-    z-index: 10;
-  }
-
-  .sticker-network {
-    border-top: 6px solid var(--circuit-blue);
-    background: #FAFCFF;
-  }
-
-  .sticker-safety {
-    border-top: 6px solid var(--signal-yellow);
-    background: #FFFDF2;
-  }
-
-  .sticker-top {
+  .cert-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 0.85rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px dashed rgba(16, 16, 16, 0.2);
   }
 
-  .sticker-tag {
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: #444444;
-  }
-
-  .verified-seal {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    font-size: 0.7rem;
-    font-weight: 700;
-    background: #101010;
-    color: var(--signal-yellow);
-    padding: 0.15rem 0.45rem;
-    border: 1px solid #101010;
-  }
-
-  .seal-icon {
-    color: var(--signal-yellow);
-    font-size: 0.75rem;
-  }
-
-  .sticker-body {
-    margin-bottom: 1rem;
-  }
-
-  .sticker-icon-badge {
-    font-size: 2rem;
-    line-height: 1;
-    margin-bottom: 0.6rem;
+  .cert-icon {
+    font-size: 1.4rem;
   }
 
   .cert-name {
-    font-size: 1.15rem;
-    line-height: 1.25;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    text-transform: uppercase;
     color: var(--ink);
-    margin-bottom: 0.35rem;
+    line-height: 1.2;
   }
 
   .cert-issuer {
-    font-size: 0.84rem;
-    color: #555555;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    color: #666;
+    font-weight: 600;
   }
 
-  .sticker-bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 0.65rem;
-    border-top: 1px solid rgba(16, 16, 16, 0.15);
-  }
-
-  .cat-pill {
+  .cert-code {
     font-size: 0.68rem;
     font-weight: 700;
-    color: #222222;
-    background: rgba(16, 16, 16, 0.06);
-    padding: 0.15rem 0.4rem;
+    color: #888;
+    background: var(--paper);
+    border: var(--border-2);
+    padding: 0.15rem 0.45rem;
+    display: inline-block;
+    width: fit-content;
   }
 
-  .hash-id {
+  .cert-status-row {
+    margin-top: 0.25rem;
+    border-top: var(--border-2);
+    padding-top: 0.5rem;
+  }
+
+  .cert-status {
+    font-family: var(--font-mono);
     font-size: 0.68rem;
-    color: #777777;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #888;
+  }
+
+  .status-active {
+    color: var(--green);
   }
 </style>

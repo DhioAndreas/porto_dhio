@@ -6,9 +6,9 @@ interface Props {
 }
 
 const {
-  title = "Dhio Andreas Gemilang — Full-Stack Developer & IT Graduate",
-  description = "Portofolio profesional Dhio Andreas Gemilang. Full-Stack Developer, IT Graduate (IPK 3.34), Cisco CCNAv7 Certified, Data Annotator, dan K3 Safety Practitioner.",
-  ogImage = "/og-image.png",
+  title = "Dhio Andreas Gemilang, S.Kom — Full-Stack Developer & AI Specialist",
+  description = "Portofolio profesional Dhio Andreas Gemilang. Sarjana Teknologi Informasi (IPK 3.34), Full-Stack Developer (Laravel, React, Python), Cisco CCNAv7 Certified, dan Data Annotator di KUPU ID.",
+  ogImage = "/images/deteksi_gigi.png",
 } = Astro.props;
 
 import "../styles/global.css";
@@ -30,7 +30,7 @@ import ProjectLightbox from "../components/ProjectLightbox.astro";
     <meta name="title" content={title} />
     <meta name="description" content={description} />
     <meta name="author" content="Dhio Andreas Gemilang" />
-    <meta name="keywords" content="Dhio Andreas Gemilang, Full-Stack Developer, Web Developer Jakarta, IT Graduate Darma Persada, Cisco CCNA, KUPU ID Data Annotator, Laravel React Developer" />
+    <meta name="keywords" content="Dhio Andreas Gemilang, Full-Stack Developer, Web Developer Jakarta, IT Graduate Darma Persada, Cisco CCNA, KUPU ID Data Annotator, Laravel React Developer, AI Dental App" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -51,19 +51,6 @@ import ProjectLightbox from "../components/ProjectLightbox.astro";
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   </head>
   <body>
-    <!-- Top Signal Warning Banner -->
-    <div class="top-status-strip">
-      <div class="container strip-inner">
-        <div class="strip-item">
-          <span class="live-dot"></span>
-          <span class="mono">HOST: DHIO-ANDREAS-GEMILANG // KLENDER-JKT // STATUS: OPEN_TO_WORK</span>
-        </div>
-        <div class="strip-item hide-mobile">
-          <span class="mono">IP: 192.168.1.50/24 · CISCO CCNAv7 · S1 TI (IPK 3.34)</span>
-        </div>
-      </div>
-    </div>
-
     <!-- Navigation Header -->
     <Nav />
 
@@ -75,57 +62,15 @@ import ProjectLightbox from "../components/ProjectLightbox.astro";
     <!-- Footer -->
     <Footer />
 
-    <!-- Global Project Gallery Lightbox -->
+    <!-- Global Project Gallery Lightbox Modal -->
     <ProjectLightbox />
   </body>
 </html>
 
 <style>
-  .top-status-strip {
-    background-color: var(--ink);
-    color: var(--signal-yellow);
-    font-size: 0.75rem;
-    padding: 0.35rem 0;
-    border-bottom: 2px solid var(--signal-yellow);
-  }
-
-  .strip-inner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .strip-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .live-dot {
-    width: 8px;
-    height: 8px;
-    background-color: var(--terminal-green);
-    border-radius: 50%;
-    box-shadow: 0 0 6px var(--terminal-green);
-    animation: pulse 1.8s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.85); }
-  }
-
-  .hide-mobile {
-    display: none;
-  }
-
-  @media (min-width: 768px) {
-    .hide-mobile {
-      display: inline-flex;
-    }
-  }
-
   #main-content {
     flex: 1 0 auto;
+    position: relative;
+    z-index: 1;
   }
 </style>
