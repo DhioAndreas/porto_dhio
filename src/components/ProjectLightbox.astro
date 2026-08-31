@@ -1,514 +1,346 @@
 ---
+// ProjectLightbox.astro — Event Delegation + Vertical Scroll Gallery
 ---
 
 <div id="project-lightbox" class="lb-root" aria-modal="true" role="dialog" hidden>
-  <!-- Blurred backdrop -->
   <div class="lb-backdrop" id="lb-backdrop"></div>
 
-  <!-- Modal shell -->
-  <div class="lb-shell">
-
-    <!-- ── Top bar ── -->
-    <div class="lb-topbar">
-      <div class="lb-topbar-left">
-        <span class="lb-live-dot"></span>
-        <span class="lb-live-txt">LIVE</span>
-        <span class="lb-sep">·</span>
-        <span id="lb-title" class="lb-title-txt">Project Gallery</span>
+  <div class="lb-panel" role="document">
+    <!-- Header -->
+    <div class="lb-header">
+      <div class="lb-header-info">
+        <span class="lb-eyebrow mono">📁 Galeri Proyek</span>
+        <h2 id="lb-title" class="lb-title">—</h2>
       </div>
-      <div class="lb-topbar-right">
-        <span id="lb-counter" class="lb-counter">01 / 01</span>
-        <button id="lb-close" class="lb-close-btn" aria-label="Tutup">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
+      <button id="lb-close" class="lb-close-btn" aria-label="Tutup galeri">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
     </div>
 
-    <!-- ── Main area: image + side dots ── -->
-    <div class="lb-body">
-
-      <!-- Image viewer -->
-      <div class="lb-viewer" id="lb-viewer">
-        <!-- Ghost arrows -->
-        <button class="lb-arrow lb-arrow-l" id="lb-prev" aria-label="Sebelumnya">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
-
-        <div class="lb-img-frame" id="lb-img-frame">
-          <img id="lb-img" src="" alt="" class="lb-img" />
-          <!-- Bottom caption gradient -->
-          <div class="lb-caption-overlay">
-            <p class="lb-caption-text" id="lb-caption"></p>
-          </div>
-        </div>
-
-        <button class="lb-arrow lb-arrow-r" id="lb-next" aria-label="Berikutnya">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
-      </div>
-
-      <!-- Side dot track -->
-      <div class="lb-side-track">
-        <div class="lb-side-dots" id="lb-side-dots"></div>
-        <span class="lb-side-num" id="lb-side-num">01</span>
-      </div>
-
+    <!-- Scrollable image list -->
+    <div class="lb-body" id="lb-body">
+      <div id="lb-list" class="lb-list"></div>
     </div>
 
-    <!-- ── Filmstrip thumbnail row ── -->
-    <div class="lb-filmstrip" id="lb-filmstrip"></div>
-
+    <!-- Footer -->
+    <div class="lb-footer">
+      <span id="lb-count" class="lb-count mono">0 foto</span>
+      <span class="lb-hint">Scroll ↓ untuk lihat semua</span>
+    </div>
   </div>
 </div>
 
 <script>
   interface GItem { src: string; caption: string; }
 
-  let cur = 0;
-  let items: GItem[] = [];
-
-  const lb       = document.getElementById('project-lightbox')!;
+  const root    = document.getElementById('project-lightbox')!;
   const backdrop = document.getElementById('lb-backdrop')!;
-  const imgEl    = document.getElementById('lb-img') as HTMLImageElement;
-  const counter  = document.getElementById('lb-counter')!;
-  const caption  = document.getElementById('lb-caption')!;
   const titleEl  = document.getElementById('lb-title')!;
-  const sideNum  = document.getElementById('lb-side-num')!;
-  const sideDots = document.getElementById('lb-side-dots')!;
-  const filmstrip= document.getElementById('lb-filmstrip')!;
+  const listEl   = document.getElementById('lb-list')!;
+  const countEl  = document.getElementById('lb-count')!;
+  const bodyEl   = document.getElementById('lb-body')!;
 
-  function pad2(n: number) { return String(n).padStart(2, '0'); }
+  /* ─── Open ─── */
+  function openGallery(title: string, items: GItem[]) {
+    if (!items.length) return;
 
-  function openModal(title: string, gallery: GItem[]) {
-    if (!gallery?.length) return;
-    items = gallery;
-    cur   = 0;
     titleEl.textContent = title;
+    countEl.textContent = `${items.length} foto`;
 
-    // Build side dots
-    sideDots.innerHTML = '';
-    gallery.forEach((_, i) => {
-      const d = document.createElement('button');
-      d.className = `lb-sdot${i === 0 ? ' active' : ''}`;
-      d.setAttribute('aria-label', `Slide ${i + 1}`);
-      d.addEventListener('click', () => go(i));
-      sideDots.appendChild(d);
+    listEl.innerHTML = items.map((item, i) => `
+      <div class="lb-item">
+        <div class="lb-item-label">
+          <span class="lb-item-num">${String(i + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}</span>
+        </div>
+        <div class="lb-item-img-box">
+          <img
+            src="${item.src}"
+            alt="${item.caption || `Foto ${i + 1}`}"
+            class="lb-item-img"
+            loading="${i < 2 ? 'eager' : 'lazy'}"
+          />
+        </div>
+        ${item.caption ? `
+          <div class="lb-item-caption">
+            <span class="lb-cap-badge">${String(i + 1).padStart(2, '0')}</span>
+            <p class="lb-cap-text">${item.caption}</p>
+          </div>
+        ` : ''}
+      </div>
+    `).join('');
+
+    bodyEl.scrollTop = 0;
+    root.removeAttribute('hidden');
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => root.classList.add('open'));
     });
-
-    // Build filmstrip
-    filmstrip.innerHTML = '';
-    gallery.forEach((item, i) => {
-      const btn = document.createElement('button');
-      btn.className = `lb-thumb${i === 0 ? ' active' : ''}`;
-      btn.setAttribute('aria-label', `Foto ${i + 1}`);
-      btn.innerHTML = `<img src="${item.src}" alt="thumb ${i+1}" loading="lazy"/>`;
-      btn.addEventListener('click', () => go(i));
-      filmstrip.appendChild(btn);
-    });
-
-    go(0);
-    lb.removeAttribute('hidden');
-    requestAnimationFrame(() => lb.classList.add('open'));
     document.body.style.overflow = 'hidden';
-    setTimeout(() => document.getElementById('lb-close')?.focus(), 60);
+    document.getElementById('lb-close')?.focus();
   }
 
-  function closeModal() {
-    lb.classList.remove('open');
+  /* ─── Close ─── */
+  function closeGallery() {
+    root.classList.remove('open');
     setTimeout(() => {
-      lb.setAttribute('hidden', '');
+      root.setAttribute('hidden', '');
       document.body.style.overflow = '';
-    }, 280);
+    }, 300);
   }
 
-  function go(i: number) {
-    if (i < 0) i = items.length - 1;
-    if (i >= items.length) i = 0;
-    cur = i;
+  /* ─── Event Delegation: catch ALL gallery buttons on the page ─── */
+  document.addEventListener('click', (e) => {
+    const btn = (e.target as Element).closest<HTMLElement>('.open-gallery-btn');
+    if (!btn) return;
 
-    const item = items[i];
-    const total = items.length;
+    const raw   = btn.dataset.gallery || '[]';
+    const title = btn.dataset.title || 'Galeri';
+    let items: GItem[] = [];
 
-    // Transition image
-    imgEl.classList.add('lb-img-exit');
-    setTimeout(() => {
-      imgEl.src = item.src;
-      imgEl.alt = item.caption;
-      imgEl.classList.remove('lb-img-exit');
-    }, 130);
+    try {
+      const parsed = JSON.parse(raw);
+      items = parsed.map((p: GItem | string) =>
+        typeof p === 'string'
+          ? { src: p, caption: '' }
+          : { src: p.src, caption: p.caption ?? '' }
+      );
+    } catch { items = []; }
 
-    caption.textContent  = item.caption;
-    counter.textContent  = `${pad2(i + 1)} / ${pad2(total)}`;
-    sideNum.textContent  = pad2(i + 1);
-
-    // Sync dots
-    sideDots.querySelectorAll<HTMLButtonElement>('.lb-sdot').forEach((d, di) =>
-      d.classList.toggle('active', di === i)
-    );
-
-    // Sync filmstrip
-    filmstrip.querySelectorAll<HTMLButtonElement>('.lb-thumb').forEach((t, ti) => {
-      t.classList.toggle('active', ti === i);
-      if (ti === i) t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    });
-  }
-
-  // Wire up controls
-  document.getElementById('lb-close')!.addEventListener('click', closeModal);
-  backdrop.addEventListener('click', closeModal);
-  document.getElementById('lb-prev')!.addEventListener('click', () => go(cur - 1));
-  document.getElementById('lb-next')!.addEventListener('click', () => go(cur + 1));
-
-  // Keyboard
-  document.addEventListener('keydown', e => {
-    if (lb.hasAttribute('hidden')) return;
-    if (e.key === 'Escape')     closeModal();
-    if (e.key === 'ArrowLeft')  go(cur - 1);
-    if (e.key === 'ArrowRight') go(cur + 1);
+    if (items.length) openGallery(title, items);
   });
 
-  // Touch swipe
-  let touchX = 0;
-  lb.addEventListener('touchstart', e => { touchX = e.changedTouches[0].clientX; }, { passive: true });
-  lb.addEventListener('touchend',   e => {
-    const dx = e.changedTouches[0].clientX - touchX;
-    if (Math.abs(dx) > 50) dx < 0 ? go(cur + 1) : go(cur - 1);
-  });
+  /* ─── Controls ─── */
+  backdrop.addEventListener('click', closeGallery);
+  document.getElementById('lb-close')!.addEventListener('click', closeGallery);
 
-  // External trigger
-  document.addEventListener('open-project-gallery', (e: Event) => {
-    const d = (e as CustomEvent).detail as { title: string; gallery: GItem[] };
-    openModal(d.title, d.gallery);
+  document.addEventListener('keydown', (e) => {
+    if (!root.hasAttribute('hidden') && e.key === 'Escape') closeGallery();
   });
 </script>
 
 <style>
-/* ── Root ── */
-.lb-root {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  opacity: 0;
-  transition: opacity 0.28s ease;
-}
-.lb-root[hidden] { display: none; }
-.lb-root.open    { opacity: 1; }
+  /* ── Overlay ── */
+  .lb-root {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-end;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s ease;
+  }
+  .lb-root[hidden] { display: none !important; }
+  .lb-root.open    { opacity: 1; pointer-events: auto; }
 
-/* Backdrop */
-.lb-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(4, 5, 9, 0.86);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  cursor: pointer;
-}
+  /* Backdrop */
+  .lb-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 10, 10, 0.65);
+    backdrop-filter: blur(3px);
+    cursor: pointer;
+  }
 
-/* Shell */
-.lb-shell {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  max-width: 900px;
-  background: #0A0B10;
-  border: 1px solid rgba(255,255,255,0.085);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.03),
-    0 40px 100px rgba(0,0,0,0.8),
-    0 8px 32px rgba(0,0,0,0.5);
-  transform: scale(0.93) translateY(20px);
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-  display: flex;
-  flex-direction: column;
-  max-height: 90vh;
-}
-.lb-root.open .lb-shell {
-  transform: scale(1) translateY(0);
-}
+  /* ── Drawer Panel ── */
+  .lb-panel {
+    position: relative;
+    z-index: 1;
+    width: min(560px, 100vw);
+    height: 100%;
+    background: var(--paper-card, #fff);
+    border-left: 4px solid var(--ink, #0a0a0a);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(110%);
+    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+  }
 
-/* ── Top bar ── */
-.lb-topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.7rem 1.1rem;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  flex-shrink: 0;
-  gap: 1rem;
-}
+  .lb-root.open .lb-panel { transform: translateX(0); }
 
-.lb-topbar-left {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  overflow: hidden;
-}
+  /* Mobile: slide from bottom */
+  @media (max-width: 600px) {
+    .lb-root { align-items: flex-end; justify-content: stretch; }
+    .lb-panel {
+      width: 100%;
+      height: 92dvh;
+      border-left: none;
+      border-top: 4px solid var(--ink, #0a0a0a);
+      transform: translateY(110%);
+    }
+    .lb-root.open .lb-panel { transform: translateY(0); }
+  }
 
-.lb-live-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #22C55E;
-  box-shadow: 0 0 8px rgba(34,197,94,0.7);
-  flex-shrink: 0;
-  animation: lbPulse 2s infinite;
-}
-@keyframes lbPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  /* ── Header ── */
+  .lb-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.35rem;
+    background: var(--yellow, #FFD400);
+    border-bottom: 3px solid var(--ink, #0a0a0a);
+    flex-shrink: 0;
+  }
 
-.lb-live-txt {
-  font-family: var(--font-mono, 'JetBrains Mono', monospace);
-  font-size: 0.62rem;
-  font-weight: 700;
-  color: #22C55E;
-  letter-spacing: 0.08em;
-}
+  .lb-header-info { flex: 1; min-width: 0; }
 
-.lb-sep {
-  color: rgba(255,255,255,0.18);
-  font-size: 0.75rem;
-}
+  .lb-eyebrow {
+    display: block;
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(0,0,0,0.5);
+    margin-bottom: 0.2rem;
+  }
 
-.lb-title-txt {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: rgba(255,255,255,0.82);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+  .lb-title {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 1rem;
+    text-transform: uppercase;
+    color: var(--ink, #0a0a0a);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+  }
 
-.lb-topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  flex-shrink: 0;
-}
+  .lb-close-btn {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    background: var(--ink, #0a0a0a);
+    color: #fff;
+    border: 2px solid var(--ink, #0a0a0a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.25);
+  }
+  .lb-close-btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 rgba(0,0,0,0.25);
+  }
 
-.lb-counter {
-  font-family: var(--font-mono, 'JetBrains Mono', monospace);
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: rgba(255,255,255,0.3);
-  letter-spacing: 0.06em;
-}
+  /* ── Scrollable Body ── */
+  .lb-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--ink, #0a0a0a) transparent;
+  }
+  .lb-body::-webkit-scrollbar { width: 5px; }
+  .lb-body::-webkit-scrollbar-thumb { background: var(--ink, #0a0a0a); }
 
-.lb-close-btn {
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.05);
-  color: rgba(255,255,255,0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-.lb-close-btn:hover {
-  background: rgba(239,68,68,0.15);
-  border-color: rgba(239,68,68,0.35);
-  color: #EF4444;
-}
+  /* ── Image List ── */
+  .lb-list {
+    display: flex;
+    flex-direction: column;
+  }
 
-/* ── Body (image + side track) ── */
-.lb-body {
-  flex: 1 1 auto;
-  display: flex;
-  min-height: 0;
-  overflow: hidden;
-}
+  /* Individual item */
+  .lb-item {
+    border-bottom: 3px solid var(--ink, #0a0a0a);
+  }
+  .lb-item:last-child { border-bottom: none; }
 
-/* Image viewer */
-.lb-viewer {
-  flex: 1 1 auto;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #050608;
-  min-height: 0;
-  overflow: hidden;
-}
+  /* Item label bar */
+  .lb-item-label {
+    padding: 0.4rem 1.25rem;
+    background: var(--paper, #EDEDEC);
+    border-bottom: 2px solid var(--ink, #0a0a0a);
+  }
 
-.lb-img-frame {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  min-height: 320px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+  .lb-item-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
 
-.lb-img {
-  display: block;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  user-select: none;
-  transition: opacity 0.13s ease, transform 0.2s cubic-bezier(0.22,1,0.36,1);
-}
+  /* Image */
+  .lb-item-img-box {
+    background: #111;
+    line-height: 0;
+    overflow: hidden;
+  }
 
-.lb-img.lb-img-exit {
-  opacity: 0;
-  transform: scale(0.97);
-}
+  .lb-item-img {
+    width: 100%;
+    height: auto;
+    max-height: 380px;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.3s ease;
+  }
 
-/* Caption overlay */
-.lb-caption-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(to top, rgba(5,6,8,0.96) 0%, rgba(5,6,8,0.5) 60%, transparent 100%);
-  padding: 2.5rem 1.25rem 0.85rem;
-  pointer-events: none;
-}
+  .lb-item:hover .lb-item-img { transform: scale(1.02); }
 
-.lb-caption-text {
-  font-size: 0.78rem;
-  color: rgba(255,255,255,0.62);
-  line-height: 1.5;
-  font-family: var(--font-mono, 'JetBrains Mono', monospace);
-  margin: 0;
-}
+  /* Caption */
+  .lb-item-caption {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+    padding: 0.9rem 1.25rem;
+    background: var(--paper-card, #fff);
+    border-top: 2px solid var(--ink, #0a0a0a);
+  }
 
-/* Ghost arrows */
-.lb-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(10,11,16,0.6);
-  border: 1px solid rgba(255,255,255,0.12);
-  color: rgba(255,255,255,0.65);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.2s ease, background 0.15s ease, transform 0.15s ease, color 0.15s ease;
-  backdrop-filter: blur(8px);
-}
-.lb-viewer:hover .lb-arrow { opacity: 1; }
-.lb-arrow:hover {
-  background: rgba(255,255,255,0.12);
-  border-color: rgba(255,255,255,0.28);
-  color: #fff;
-  transform: translateY(-50%) scale(1.1);
-}
-.lb-arrow-l { left: 0.75rem; }
-.lb-arrow-r { right: 0.75rem; }
+  .lb-cap-badge {
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--blue, #1D4ED8);
+    border: 2px solid var(--ink, #0a0a0a);
+    padding: 0.15rem 0.45rem;
+    line-height: 1.4;
+    box-shadow: 2px 2px 0 var(--ink, #0a0a0a);
+    margin-top: 1px;
+  }
 
-/* ── Side dot track ── */
-.lb-side-track {
-  width: 44px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  border-left: 1px solid rgba(255,255,255,0.05);
-  padding: 1rem 0;
-  background: rgba(0,0,0,0.2);
-}
+  .lb-cap-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: #333;
+    font-weight: 500;
+  }
 
-.lb-side-dots {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-}
+  /* ── Footer ── */
+  .lb-footer {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.7rem 1.35rem;
+    border-top: 3px solid var(--ink, #0a0a0a);
+    background: var(--paper, #EDEDEC);
+  }
 
-.lb-sdot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.18);
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  transition: all 0.2s cubic-bezier(0.22,1,0.36,1);
-}
-.lb-sdot:hover   { background: rgba(255,255,255,0.4); }
-.lb-sdot.active  {
-  height: 18px;
-  border-radius: 3px;
-  background: #F59E0B;
-  box-shadow: 0 0 8px rgba(245,158,11,0.5);
-}
+  .lb-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--ink, #0a0a0a);
+    text-transform: uppercase;
+  }
 
-.lb-side-num {
-  font-family: var(--font-mono, 'JetBrains Mono', monospace);
-  font-size: 0.6rem;
-  font-weight: 700;
-  color: rgba(255,255,255,0.2);
-  letter-spacing: 0.04em;
-  margin-top: 0.25rem;
-}
-
-/* ── Filmstrip ── */
-.lb-filmstrip {
-  display: flex;
-  gap: 6px;
-  padding: 0.6rem 0.85rem;
-  background: rgba(0,0,0,0.35);
-  border-top: 1px solid rgba(255,255,255,0.06);
-  overflow-x: auto;
-  flex-shrink: 0;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.08) transparent;
-}
-
-.lb-thumb {
-  flex-shrink: 0;
-  width: 58px;
-  height: 42px;
-  border-radius: 5px;
-  border: 1.5px solid rgba(255,255,255,0.07);
-  background: rgba(255,255,255,0.03);
-  overflow: hidden;
-  cursor: pointer;
-  padding: 0;
-  opacity: 0.38;
-  transition: all 0.15s ease;
-}
-.lb-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
-  display: block;
-}
-.lb-thumb:hover {
-  opacity: 0.7;
-  border-color: rgba(255,255,255,0.2);
-  transform: scale(1.06);
-}
-.lb-thumb.active {
-  opacity: 1;
-  border-color: #F59E0B;
-  box-shadow: 0 0 0 2px rgba(245,158,11,0.25), 0 0 12px rgba(245,158,11,0.15);
-}
-
-/* ── Mobile ── */
-@media (max-width: 580px) {
-  .lb-root { padding: 0.5rem; }
-  .lb-shell { max-height: 96vh; border-radius: 12px; }
-  .lb-side-track { display: none; }
-  .lb-img-frame { min-height: 240px; }
-  .lb-thumb { width: 44px; height: 32px; }
-  .lb-title-txt { font-size: 0.78rem; }
-}
+  .lb-hint {
+    font-size: 0.7rem;
+    color: #888;
+    font-family: 'Inter', sans-serif;
+  }
 </style>

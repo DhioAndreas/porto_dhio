@@ -1,128 +1,67 @@
 ---
 interface Props {
   id: string;
-  code: string;
+  badge: string;
   title: string;
   subtitle?: string;
-  accent?: "yellow" | "blue" | "red" | "green" | "dark";
-  class?: string;
+  accentColor?: "yellow" | "blue" | "red" | "green" | "dark" | "purple" | "orange";
 }
+const { id, badge, title, subtitle, accentColor = "yellow" } = Astro.props;
 
-const {
-  id,
-  code,
-  title,
-  subtitle,
-  accent = "yellow",
-  class: className = "",
-} = Astro.props;
+const accentBg: Record<string,string> = {
+  yellow: "var(--yellow)", blue: "var(--blue)", red: "var(--red)",
+  green: "var(--green)", dark: "var(--ink)", purple: "var(--purple)", orange: "var(--orange)",
+};
+const accentFg: Record<string,string> = {
+  yellow: "var(--ink)", blue: "#fff", red: "#fff",
+  green: "#fff", dark: "#fff", purple: "#fff", orange: "#fff",
+};
 ---
 
-<section id={id} class={`section-tile-block ${className}`}>
+<section id={id} class="section sec-wrap">
   <div class="container">
-    <!-- Header Tile -->
-    <div class="tile-header-wrapper">
-      <div class="tile-header-left">
-        <div class={`tile-code-badge badge-${accent}`}>
-          <span class="mono">{code}</span>
-        </div>
-        <h2 class="tile-main-title">{title}</h2>
+    <div class="sec-hdr">
+      <div class="sec-hdr-left">
+        <span class="sec-badge" style={`background:${accentBg[accentColor]};color:${accentFg[accentColor]};`}>
+          {badge}
+        </span>
+        <h2 class="sec-title">{title}</h2>
+        {subtitle && <p class="sec-sub">{subtitle}</p>}
       </div>
-      {subtitle && <p class="tile-subtitle">{subtitle}</p>}
+      <div class="sec-deco" aria-hidden="true">
+        <span class="deco-star">✦</span>
+      </div>
     </div>
 
-    <!-- Tile Content Slot -->
-    <div class="tile-body-slot">
+    <div class="sec-body">
       <slot />
     </div>
   </div>
 </section>
 
 <style>
-  .section-tile-block {
-    padding: 3.5rem 0;
-    position: relative;
-  }
+  .sec-wrap { position: relative; }
 
-  .tile-header-wrapper {
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 3px solid var(--ink);
+  .sec-hdr {
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: var(--border);
   }
 
-  @media (min-width: 768px) {
-    .tile-header-wrapper {
-      flex-direction: row;
-      align-items: flex-end;
-      justify-content: space-between;
-    }
+  .sec-hdr-left { display: flex; flex-direction: column; gap: 0.4rem; }
+
+  .deco-star {
+    font-size: 2.5rem;
+    color: rgba(13,13,13,0.08);
+    font-family: var(--font-display);
+    line-height: 1;
   }
 
-  .tile-header-left {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
+  @media (max-width: 639px) { .deco-star { display: none; } }
 
-  .tile-code-badge {
-    display: inline-flex;
-    align-items: center;
-    font-size: 0.8rem;
-    font-weight: 700;
-    padding: 0.2rem 0.6rem;
-    border: 2px solid var(--ink);
-    width: fit-content;
-    box-shadow: 2px 2px 0 var(--ink);
-  }
-
-  .badge-yellow {
-    background-color: var(--signal-yellow);
-    color: var(--ink);
-  }
-
-  .badge-blue {
-    background-color: var(--circuit-blue);
-    color: #FFFFFF;
-  }
-
-  .badge-red {
-    background-color: var(--alert-red);
-    color: #FFFFFF;
-  }
-
-  .badge-green {
-    background-color: var(--terminal-green);
-    color: var(--ink);
-  }
-
-  .badge-dark {
-    background-color: var(--ink);
-    color: #FFFFFF;
-  }
-
-  .tile-main-title {
-    font-size: 2.2rem;
-    letter-spacing: -0.02em;
-    color: var(--ink);
-  }
-
-  @media (min-width: 768px) {
-    .tile-main-title {
-      font-size: 2.8rem;
-    }
-  }
-
-  .tile-subtitle {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #4A4A52;
-    max-width: 550px;
-  }
-
-  .tile-body-slot {
-    position: relative;
-  }
+  .sec-body { position: relative; }
 </style>

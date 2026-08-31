@@ -1,211 +1,283 @@
 ---
+// Nav.astro — Neubrutalism Navigation
 ---
 
-<header class="site-header">
-  <div class="container header-container">
-    <a href="#" class="brand-badge" aria-label="Dhio Andreas Gemilang Home">
-      <span class="brand-initials">DAG</span>
-      <span class="brand-divider">/</span>
-      <span class="brand-title">DHIO.ANDREAS</span>
-      <span class="brand-tag hide-sm">DEV_v2.5</span>
+<header class="nav-shell" id="site-nav">
+  <div class="nav-inner">
+    <!-- Logo / Brand -->
+    <a href="#hero" class="nav-logo" id="nav-logo">
+      <span class="logo-mark">DAG</span>
+      <span class="logo-dot" aria-hidden="true"></span>
     </a>
 
-    <!-- Desktop Navigation Links -->
-    <nav class="nav-desktop" aria-label="Main Navigation">
-      <a href="#about" class="nav-link">About</a>
-      <a href="#skills" class="nav-link">Skills</a>
-      <a href="#experience" class="nav-link">Experience</a>
-      <a href="#projects" class="nav-link">Projects</a>
-      <a href="#leadership" class="nav-link">Leadership</a>
-      <a href="#certifications" class="nav-link">Certs</a>
-      <a href="#contact" class="btn btn-sm btn-primary">Contact 📨</a>
+    <!-- Desktop Nav Links -->
+    <nav class="nav-links" aria-label="Navigasi utama">
+      <a href="#about"         class="nav-link" id="nav-about">Tentang</a>
+      <a href="#skills"        class="nav-link" id="nav-skills">Keahlian</a>
+      <a href="#experience"    class="nav-link" id="nav-experience">Pengalaman</a>
+      <a href="#projects"      class="nav-link" id="nav-projects">Proyek</a>
+      <a href="#certifications" class="nav-link" id="nav-certifications">Sertifikasi</a>
+      <a href="#leadership"    class="nav-link" id="nav-leadership">Organisasi</a>
     </nav>
 
-    <!-- Mobile Hamburger Toggle -->
-    <button id="mobile-menu-btn" class="mobile-toggle btn btn-sm" aria-label="Toggle navigation menu" aria-expanded="false">
-      <span class="menu-icon">☰</span>
-    </button>
+    <!-- CTA + Hamburger -->
+    <div class="nav-actions">
+      <a
+        href="#contact"
+        class="btn btn-yellow btn-sm nav-cta"
+        id="nav-contact-cta"
+      >Kontak →</a>
+
+      <button
+        class="hamburger"
+        id="hamburger-btn"
+        aria-label="Buka menu navigasi"
+        aria-expanded="false"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
   </div>
 
-  <!-- Mobile Dropdown Menu -->
-  <div id="mobile-nav-panel" class="mobile-nav-panel">
-    <div class="container mobile-links">
-      <a href="#about" class="mobile-link">01. About</a>
-      <a href="#skills" class="mobile-link">02. Skills Matrix</a>
-      <a href="#experience" class="mobile-link">03. Experience</a>
-      <a href="#projects" class="mobile-link">04. Projects</a>
-      <a href="#leadership" class="mobile-link">05. Leadership & Volunteer</a>
-      <a href="#education" class="mobile-link">06. Education</a>
-      <a href="#certifications" class="mobile-link">07. Certifications</a>
-      <a href="#contact" class="btn btn-primary" style="margin-top: 1rem; width: 100%;">Hubungi Saya 📨</a>
-    </div>
+  <!-- Mobile Drawer -->
+  <div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
+    <nav class="mobile-links" aria-label="Menu mobile">
+      <a href="#about"          class="mobile-link" id="mob-about">Tentang</a>
+      <a href="#skills"         class="mobile-link" id="mob-skills">Keahlian</a>
+      <a href="#experience"     class="mobile-link" id="mob-experience">Pengalaman</a>
+      <a href="#projects"       class="mobile-link" id="mob-projects">Proyek</a>
+      <a href="#certifications"  class="mobile-link" id="mob-certifications">Sertifikasi</a>
+      <a href="#leadership"     class="mobile-link" id="mob-leadership">Organisasi</a>
+      <a href="#contact"        class="mobile-link accent" id="mob-contact">Kontak →</a>
+    </nav>
   </div>
 </header>
 
 <script>
-  const toggleBtn = document.getElementById('mobile-menu-btn');
-  const navPanel = document.getElementById('mobile-nav-panel');
-  const links = document.querySelectorAll('.mobile-link');
+  const btn      = document.getElementById('hamburger-btn')!;
+  const drawer   = document.getElementById('mobile-drawer')!;
+  const mLinks   = drawer.querySelectorAll('.mobile-link');
+  const navShell = document.getElementById('site-nav')!;
 
-  if (toggleBtn && navPanel) {
-    toggleBtn.addEventListener('click', () => {
-      const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
-      toggleBtn.setAttribute('aria-expanded', String(!isExpanded));
-      navPanel.classList.toggle('is-open');
-      toggleBtn.innerHTML = isExpanded ? '<span class="menu-icon">☰</span>' : '<span class="menu-icon">✕</span>';
-    });
+  // Toggle
+  btn.addEventListener('click', () => {
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!open));
+    drawer.setAttribute('aria-hidden', String(open));
+    drawer.classList.toggle('open', !open);
+    btn.classList.toggle('active', !open);
+  });
 
-    links.forEach(link => {
-      link.addEventListener('click', () => {
-        navPanel.classList.remove('is-open');
-        toggleBtn.setAttribute('aria-expanded', 'false');
-        toggleBtn.innerHTML = '<span class="menu-icon">☰</span>';
-      });
+  // Close on link click
+  mLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      btn.setAttribute('aria-expanded', 'false');
+      drawer.setAttribute('aria-hidden', 'true');
+      drawer.classList.remove('open');
+      btn.classList.remove('active');
     });
-  }
+  });
+
+  // Scroll-based border
+  window.addEventListener('scroll', () => {
+    navShell.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
 </script>
 
 <style>
-  .site-header {
-    position: sticky;
+  .nav-shell {
+    position: fixed;
     top: 0;
-    z-index: 100;
-    background-color: var(--paper-card);
-    border-bottom: var(--border-thick);
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: var(--paper);
+    border-bottom: var(--border);
+    transition: box-shadow 0.2s;
+  }
+
+  .nav-shell.scrolled {
     box-shadow: 0 4px 0 var(--ink);
   }
 
-  .header-container {
+  .nav-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding: 0 1.25rem;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+    gap: 1rem;
   }
 
-  .brand-badge {
-    display: inline-flex;
+  @media (min-width: 768px) {
+    .nav-inner { padding: 0 2rem; }
+  }
+
+  /* Logo */
+  .nav-logo {
+    display: flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0.4rem;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .logo-mark {
     font-family: var(--font-display);
-    font-size: 1.15rem;
+    font-size: 1.2rem;
+    color: var(--ink);
+    background: var(--yellow);
+    padding: 0.2rem 0.55rem;
+    border: var(--border-2);
+    box-shadow: var(--shadow-sm);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .logo-dot {
+    width: 8px;
+    height: 8px;
     background: var(--ink);
-    color: #FFFFFF;
-    padding: 0.4rem 0.75rem;
-    border: 2px solid var(--ink);
-    box-shadow: 3px 3px 0 var(--signal-yellow);
-    transition: transform 0.1s ease;
+    border-radius: 50%;
+    display: none;
   }
 
-  .brand-badge:hover {
-    transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 var(--signal-yellow);
-  }
-
-  .brand-initials {
-    color: var(--signal-yellow);
-  }
-
-  .brand-divider {
-    color: #888888;
-  }
-
-  .brand-tag {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    background: var(--circuit-blue);
-    color: #FFFFFF;
-    padding: 0.15rem 0.4rem;
-    margin-left: 0.25rem;
-  }
-
-  .nav-desktop {
+  /* Desktop Links */
+  .nav-links {
     display: none;
     align-items: center;
-    gap: 1.5rem;
+    gap: 0;
+  }
+
+  @media (min-width: 900px) {
+    .nav-links { display: flex; }
   }
 
   .nav-link {
-    font-family: var(--font-subhead);
+    font-family: var(--font-sub);
+    font-size: 0.82rem;
     font-weight: 700;
-    font-size: 0.95rem;
     text-transform: uppercase;
+    letter-spacing: 0.04em;
     color: var(--ink);
-    position: relative;
-    padding: 0.25rem 0;
-    transition: color 0.15s ease;
+    padding: 0.45rem 0.85rem;
+    border-right: var(--border-2);
+    text-decoration: none;
+    transition: background 0.12s;
+    white-space: nowrap;
+  }
+
+  .nav-links .nav-link:first-child {
+    border-left: var(--border-2);
   }
 
   .nav-link:hover {
-    color: var(--circuit-blue);
+    background: var(--yellow);
   }
 
-  .nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0%;
-    height: 3px;
-    background-color: var(--signal-yellow);
-    transition: width 0.2s ease;
-  }
-
-  .nav-link:hover::after {
-    width: 100%;
-  }
-
-  .mobile-toggle {
+  /* Nav Actions */
+  .nav-actions {
     display: flex;
-    font-size: 1.25rem;
-    padding: 0.35rem 0.75rem;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
   }
 
-  .mobile-nav-panel {
+  .nav-cta {
     display: none;
-    background-color: var(--paper-card);
-    border-top: var(--border-thick);
-    border-bottom: var(--border-thick);
-    padding: 1.5rem 0;
-    box-shadow: var(--shadow-hard);
   }
 
-  .mobile-nav-panel.is-open {
+  @media (min-width: 640px) {
+    .nav-cta { display: inline-flex; }
+  }
+
+  /* Hamburger */
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    background: var(--paper-card);
+    border: var(--border);
+    box-shadow: var(--shadow-sm);
+    padding: 7px;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+
+  .hamburger:hover {
+    transform: translate(2px, 2px);
+    box-shadow: var(--shadow-pressed);
+  }
+
+  .hamburger span {
     display: block;
+    height: 2px;
+    background: var(--ink);
+    border-radius: 0;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+
+  .hamburger.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .hamburger.active span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  .hamburger.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  @media (min-width: 900px) {
+    .hamburger { display: none; }
+  }
+
+  /* Mobile Drawer */
+  .mobile-drawer {
+    display: none;
+    flex-direction: column;
+    border-top: var(--border);
+    background: var(--paper-card);
+  }
+
+  .mobile-drawer.open {
+    display: flex;
+  }
+
+  @media (min-width: 900px) {
+    .mobile-drawer { display: none !important; }
   }
 
   .mobile-links {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
   }
 
   .mobile-link {
-    font-family: var(--font-subhead);
+    font-family: var(--font-sub);
+    font-size: 1rem;
     font-weight: 700;
-    font-size: 1.1rem;
     text-transform: uppercase;
-    padding: 0.5rem 0;
-    border-bottom: 1px dashed rgba(16, 16, 16, 0.2);
+    padding: 1rem 1.5rem;
+    border-bottom: var(--border-2);
+    text-decoration: none;
+    color: var(--ink);
+    transition: background 0.12s, padding-left 0.12s;
   }
 
   .mobile-link:hover {
-    color: var(--circuit-blue);
-    padding-left: 0.5rem;
+    background: var(--yellow-light);
+    padding-left: 2rem;
   }
 
-  @media (min-width: 900px) {
-    .nav-desktop {
-      display: flex;
-    }
-    .mobile-toggle {
-      display: none;
-    }
-  }
-
-  @media (max-width: 500px) {
-    .hide-sm {
-      display: none;
-    }
+  .mobile-link.accent {
+    background: var(--yellow);
   }
 </style>
